@@ -1,0 +1,46 @@
+.container {
+    --BaseWidth: 92%;
+    margin: 2rem auto;
+}
+
+.formats {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-columns: 8rem;
+    column-gap: var(--ButtonGap);
+    row-gap: var(--ButtonGap);
+    width: var(--BaseWidth);
+    margin: 1rem auto;
+}
+
+@media (max-width: 500px) {
+    .formats {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.format {
+    width: 100%;
+    padding: var(--ButtonPaddingV) var(--ButtonPaddingH);
+    border: 1px solid currentColor;
+    border-radius: var(--BorderRadius);
+}
+
+.format.selected {
+    border: none;
+    color: var(--BackgroundColor);
+    background-color: var(--ForegroundColor);
+}
+
+.output {
+    width: var(--BaseWidth);
+    height: 20rem;
+    padding: 1rem;
+    margin: 1rem auto;
+    overflow: auto;
+    white-space: pre;
+    color: var(--BackgroundColor);
+    font-family: monospace;
+    background-color: var(--ForegroundColor);
+    border-radius: var(--BorderRadius);
+}

@@ -1,0 +1,19 @@
+.button {
+    --Size: 1.2rem;
+    width: var(--Size);
+    height: var(--Size);
+    border: 1px solid currentColor;
+    opacity: 0.3;
+    transition: opacity 0.1s;
+    border-radius: var(--BorderRadius);
+}
+
+.button:hover {
+    opacity: 1;
+}
+
+.button>svg {
+    width: 100%;
+    height: 100%;
+    stroke: currentColor;
+}

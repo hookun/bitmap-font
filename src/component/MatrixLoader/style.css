@@ -1,0 +1,30 @@
+.form {
+    display: flex;
+    align-items: stretch;
+    width: var(--BaseWidth);
+    margin: 1rem auto;
+    overflow: hidden;
+}
+
+.form>* {
+    border: 1px solid currentColor;
+    border-width: 1px 1px 1px 0;
+}
+
+.form>:first-child {
+    border-left-width: 1px;
+    border-radius: var(--BorderRadius) 0 0 var(--BorderRadius);
+}
+
+.form>:last-child {
+    border-radius: 0 var(--BorderRadius) var(--BorderRadius) 0;
+}
+
+.form>input {
+    flex-grow: 1;
+    padding-left: var(--ButtonGap);
+}
+
+.form>button {
+    padding: var(--ButtonPaddingV) var(--ButtonPaddingH);
+}

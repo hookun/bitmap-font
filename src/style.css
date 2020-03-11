@@ -1,0 +1,11 @@
+:root {
+    --BorderRadius: 0.2rem;
+    --ButtonGap: 0.3rem;
+    --ButtonPaddingH: 0.8rem;
+    --ButtonPaddingV: var(--ButtonGap);
+    --Orange: rgb(214, 148, 24);
+}
+
+h1, h2 {
+    width: var(--BaseWidth);
+}

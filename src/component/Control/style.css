@@ -1,0 +1,23 @@
+.container {
+    display: grid;
+    grid-template-columns: 7rem repeat(2, 2rem) 1fr;
+    grid-template-rows: repeat(3, 1fr);
+    grid-auto-flow: column;
+    column-gap: var(--ButtonGap);
+    align-items: center;
+    justify-items: center;
+    width: var(--BaseWidth);
+    margin: 1rem auto;
+}
+
+.container>button {
+    width: 100%;
+    height: 100%;
+}
+
+.reset {
+    justify-self: start;
+    padding: var(--ButtonPaddingV) var(--ButtonPaddingH);
+    border: 1px solid currentColor;
+    border-radius: var(--BorderRadius);
+}

@@ -1,0 +1,23 @@
+{
+    "private": true,
+    "name": "@hookun/bitmap-font",
+    "license": "Apache-2.0",
+    "scripts": {
+        "start": "build-page --watch",
+        "build": "build-page --dest docs",
+        "test": "run-s test:*",
+        "test:type": "tsc"
+    },
+    "devDependencies": {
+        "@hookun/builder": "^0.2.13",
+        "@types/react": "^16.9.23",
+        "@types/react-dom": "^16.9.5",
+        "idb-keyval": "^3.2.0",
+        "npm-run-all": "^4.1.5",
+        "react": "^16.13.0",
+        "react-dom": "^16.13.0",
+        "reselect": "^4.0.0",
+        "typesafe-actions": "^5.1.0",
+        "typescript": "^3.8.3"
+    }
+}

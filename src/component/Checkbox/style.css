@@ -1,0 +1,13 @@
+.container {
+    --Size: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.check {
+    width: var(--Size);
+    height: var(--Size);
+    fill: none;
+    stroke: currentColor;
+    margin-right: var(--ButtonGap);
+}

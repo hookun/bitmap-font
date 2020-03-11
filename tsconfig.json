@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "moduleResolution": "Node"
+    },
+    "include": [
+        "src/**/*.ts",
+        "node_modules/@hookun/builder/@types/css.d.ts"
+    ]
+}
