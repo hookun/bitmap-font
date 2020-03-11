@@ -6,6 +6,14 @@
     --Orange: rgb(214, 148, 24);
 }
 
+main {
+    padding: 2rem 0;
+}
+
+main>:first-child {
+    margin-top: 0;
+}
+
 h1, h2 {
     width: var(--BaseWidth);
 }

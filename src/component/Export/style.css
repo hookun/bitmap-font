@@ -1,6 +1,6 @@
 .container {
     --BaseWidth: 92%;
-    margin: 2rem auto;
+    margin: 2rem auto 0 auto;
 }
 
 .formats {
@@ -36,7 +36,7 @@
     width: var(--BaseWidth);
     height: 20rem;
     padding: 1rem;
-    margin: 1rem auto;
+    margin: 1rem auto 0 auto;
     overflow: auto;
     white-space: pre;
     color: var(--BackgroundColor);
