@@ -84,7 +84,7 @@ export const defaultMatixData: {[character: string]: string} = {
     'わ': '9x9|81sYh1od1E929w',
     'ぁ': '9x9|00wv0wfyGCkypw',
     'ゃ': '9x9|02gnDi8h25ww40',
-    '…': '9x9|000iii00000000',
+    '…': '9x9|00002iig000000',
     'い': '9x9|044wk2wc1Aaxo0',
     'き': '9x9|23_17+0x_gi0fw',
     'し': '9x9|g20g20g22gi4f0',
