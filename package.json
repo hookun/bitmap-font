@@ -6,7 +6,7 @@
         "start": "build-page --watch",
         "build": "build-page --dest docs",
         "test": "run-s test:*",
-        "test:type": "tsc"
+        "test:type": "tsc --noEmit"
     },
     "devDependencies": {
         "@hookun/builder": "^0.2.18",
