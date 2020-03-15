@@ -23,15 +23,16 @@
 svg.svg {
     background-image: linear-gradient(0deg, var(--ForegroundColor), var(--ForegroundColor));
     background-size: 100% 1px;
-    background-repeat: no-repeat;
     background-position: center 28%;
+    background-repeat: no-repeat;
 }
 
 .svg>text {
     dominant-baseline: middle;
     text-anchor: middle;
-    font-size: 20%;
+    font-size: 17%;
     font-weight: bolder;
+    font-family: monospace;
 }
 
 .svg.selected {

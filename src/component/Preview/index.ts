@@ -40,7 +40,7 @@ export const CharacterPreview = ({character}: {character: string}) => {
                 x: size / 2,
                 y: textHeight / 2 - 1,
             },
-            character,
+            `${character} ${character.codePointAt(0).toString(16).toUpperCase().padStart(4, '0')}`,
         ),
         createElement(
             'path',
