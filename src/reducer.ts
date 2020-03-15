@@ -17,7 +17,7 @@ import {
     SetExportFormat,
     SetGrid,
 } from './action';
-import {pages, defaultMatixData} from './constants';
+import {defaultMatixData} from './constants';
 
 const reducer = createReducer<PathGeneratorState, PathGeneratorAction>(null)
 .handleAction(SetWidth, (state, {payload: width}) => {
@@ -60,17 +60,12 @@ const reducer = createReducer<PathGeneratorState, PathGeneratorAction>(null)
     ...state,
     matrix: filledArray(state.width * state.height, false),
 }))
-.handleAction(SetPage, (state, {payload: {page, character, matrixData}}) => {
-    if (state.character === character) {
-        return state;
-    }
-    return {
-        ...state,
-        page,
-        character,
-        ...decodeMatrix(matrixData || defaultMatixData[character] || ''),
-    };
-})
+.handleAction(SetPage, (state, {payload: {page, character, matrixData}}) => ({
+    ...state,
+    page,
+    character,
+    ...decodeMatrix(matrixData || defaultMatixData[character] || ''),
+}))
 .handleAction(SetCharacter, (state, {payload: {character, matrixData}}) => {
     if (state.character === character) {
         return state;

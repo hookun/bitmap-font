@@ -30,13 +30,16 @@ export const useMatrix = (character: string) => {
     const matrixData = useMatrixData(character);
     return {
         matrixData,
-        ...useMemo(() => matrixData ? decodeMatrix(matrixData) : defaultMatrix, [matrixData]),
+        ...(matrixData ? decodeMatrix(matrixData) : defaultMatrix),
     };
 };
 
 export const useMatrixAndPath = (character: string) => {
     const matrixData = useMatrix(character);
-    const d = useMemo(() => calculatePath(matrixData.matrix, matrixData.width), [matrixData]);
+    const d = useMemo(
+        () => calculatePath(matrixData.matrix, matrixData.width),
+        [matrixData.matrix, matrixData.width],
+    );
     return {...matrixData, d};
 };
 
