@@ -4,6 +4,7 @@ import {Matrix} from '../Matrix';
 import {MetrixLoader} from '../MatrixLoader';
 import {Preview} from '../Preview';
 import {Export} from '../Export';
+import {PathValue} from '../PathValue';
 
 export const Application = () => createElement(
     Fragment,
@@ -11,6 +12,7 @@ export const Application = () => createElement(
     createElement(Control),
     createElement(MetrixLoader),
     createElement(Matrix),
+    createElement(PathValue),
     createElement(Preview),
     createElement(Export),
 );
