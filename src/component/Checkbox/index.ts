@@ -1,17 +1,20 @@
-import {createElement} from 'react';
+import {createElement, useCallback, ReactElement} from 'react';
 import className from './style.css';
 
 export const Checkbox = (
-    props: {
+    {label, checked, onChange}: {
         label: string,
         checked: boolean,
         onChange: (checked: boolean) => void,
     },
-) => createElement(
+): ReactElement => createElement(
     'button',
     {
         className: className.container,
-        onClick: () => props.onChange(!props.checked),
+        onClick: useCallback(
+            () => onChange(!checked),
+            [onChange, checked],
+        ),
     },
     createElement(
         'svg',
@@ -20,7 +23,7 @@ export const Checkbox = (
             viewBox: '-1 -1 12 12',
         },
         createElement('rect', {x: 0, y: 0, width: 10, height: 10}),
-        props.checked && createElement('path', {d: 'M2 4L4 8L8 2'}),
+        checked && createElement('path', {d: 'M2 4L4 8L8 2'}),
     ),
-    createElement('div', null, props.label),
+    createElement('div', null, label),
 );

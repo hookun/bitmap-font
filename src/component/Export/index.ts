@@ -1,4 +1,4 @@
-import {createElement, Fragment} from 'react';
+import {createElement, Fragment, ReactElement} from 'react';
 import {useSelector, useDispatch} from '../../core';
 import {selectEditableCharacterArray, selectExportFormat} from '../../selector';
 import {useMatrixData, useMatrixAndPath} from '../../use';
@@ -15,7 +15,7 @@ export const PathLine = (
         indent: string,
         br: string,
     },
-) => {
+): ReactElement => {
     const {d} = useMatrixAndPath(character);
     let text = '';
     if (format === ExportFormat.SVG) {
@@ -37,7 +37,7 @@ export const MatrixLine = (
         indent: string,
         br: string,
     },
-) => {
+): ReactElement => {
     const matrixData = useMatrixData(character);
     let text = '';
     if (format === ExportFormat.MatrixJS) {
@@ -48,13 +48,13 @@ export const MatrixLine = (
     return createElement(Fragment, null, `${text}${br}`);
 };
 
-export const ExportResult = ({format}: {format: string}) => {
+export const ExportResult = ({format}: {format: string}): ReactElement => {
     const characters = useSelector(selectEditableCharacterArray);
     const br = '\n';
     const indent = '    ';
     const lastIndex = characters.length - 1;
     let head = `{${br}`;
-    let foot = `}`;
+    let foot = '}';
     let Line = MatrixLine;
     if (format === 'SVG') {
         head = `<svg style="height:0">${br}${indent}<defs>${br}`;
@@ -86,7 +86,7 @@ export const ExportResult = ({format}: {format: string}) => {
     );
 };
 
-export const ExportFormatList = () => {
+export const ExportFormatList = (): ReactElement => {
     const currentFormat = useSelector(selectExportFormat);
     const dispatch = useDispatch();
     return createElement(
@@ -108,7 +108,7 @@ export const ExportFormatList = () => {
     );
 };
 
-export const Export = () => {
+export const Export = (): ReactElement => {
     const format = useSelector(selectExportFormat);
     return createElement(
         'div',

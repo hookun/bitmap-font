@@ -14,7 +14,7 @@ const getEdges = (
     const addDirection = (
         index: number,
         direction: number,
-    ) => {
+    ): void => {
         edges.set(index, (edges.get(index) || 0) | direction);
     };
     matrix.forEach((filled, index) => {
@@ -49,7 +49,7 @@ const getStartIndex = (
 const getNextDirection = (
     currentDirection: number,
     availableDirections: number,
-) => {
+): number => {
     switch (currentDirection) {
         case Right:
             if (Up & availableDirections) {
@@ -95,7 +95,7 @@ const step = (
         direction: number,
         edgeCount: number,
     },
-) => {
+): number => {
     const availableDirections = edges.get(index);
     if (availableDirections === direction) {
         edges.delete(index);

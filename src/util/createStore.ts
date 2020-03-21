@@ -1,9 +1,14 @@
 import * as idb from 'idb-keyval';
 
-export const createStore = (fontName = 'default') => {
+export interface LocalStore<Type> {
+    get: (key: string) => Promise<Type | undefined>,
+    set: (key: string, value: Type) => Promise<void>,
+}
+
+export const createStore = <Type>(fontName = 'default'): LocalStore<Type> => {
     const store = new idb.Store('BitmapFont', fontName);
     return {
-        get: <Type>(key: string): Promise<Type | undefined> => idb.get(key, store),
-        set: <Type>(key: string, value: Type): Promise<void> => idb.set(key, value, store),
+        get: (key: string): Promise<Type | undefined> => idb.get(key, store),
+        set: (key: string, value: Type): Promise<void> => idb.set(key, value, store),
     };
 };

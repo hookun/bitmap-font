@@ -1,10 +1,10 @@
-import {createElement, FormEvent, useRef, useEffect} from 'react';
+import {createElement, FormEvent, useRef, useEffect, ReactElement} from 'react';
 import {useDispatch, useSelector} from '../../core';
 import {LoadMatrixData} from '../../action';
 import className from './style.css';
 import {selectMatrixData} from '../../selector';
 
-export const MetrixLoader = () => {
+export const MetrixLoader = (): ReactElement => {
     const ref = useRef<HTMLInputElement>();
     const dispatch = useDispatch();
     const matrixData = useSelector(selectMatrixData);

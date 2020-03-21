@@ -1,13 +1,20 @@
-import {createElement, Fragment} from 'react';
+import {createElement} from 'react';
 import {useSelector} from '../../core';
 import {selectPathD} from '../../selector';
 import className from './style.css';
 
-export const PathValue = () => {
+export const PathValue = (): ReactElement => {
     const d = useSelector(selectPathD);
     return createElement(
-        'pre',
-        {className: className.container},
-        d,
+        'input',
+        {
+            type: 'text',
+            className: className.container,
+            value: d,
+            readOnly: true,
+            onClick: (event) => {
+                event.currentTarget.select();
+            },
+        },
     );
 };

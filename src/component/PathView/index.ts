@@ -1,4 +1,4 @@
-import {createElement, Fragment} from 'react';
+import {createElement, Fragment, ReactElement} from 'react';
 import {useSelector} from '../../core';
 import {
     selectWidth,
@@ -11,7 +11,7 @@ import {
 } from '../../selector';
 import className from './style.css';
 
-export const PathView = () => {
+export const PathView = (): ReactElement => {
     const width = useSelector(selectWidth);
     const height = useSelector(selectHeight);
     const arrowSize = useSelector(selectArrowSize);

@@ -2,7 +2,7 @@ import {Reducer} from 'react';
 import {createReducer} from 'typesafe-actions';
 import {filledArray} from './util/filledArray';
 import {decodeMatrix} from './matrix';
-import {PathGeneratorState} from './type';
+import {PathGeneratorState} from './types';
 import {
     PathGeneratorAction,
     SetWidth,
@@ -86,7 +86,7 @@ export const applyConsumers = <State, Action>(
     reducer: Reducer<State, Action>,
     ...consumers: Array<(oldState: State, action: Action, newState: State) => void | Promise<void>>
 ): Reducer<State, Action> => {
-    return (state, action) => {
+    return (state, action): State => {
         const newState = reducer(state, action);
         Promise.all(consumers.map(async (consume) => {
             await Promise.resolve(consume(state, action, newState));

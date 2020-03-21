@@ -1,11 +1,11 @@
-import {createElement, Fragment} from 'react';
+import {createElement, Fragment, ReactElement} from 'react';
 import {Selector} from 'reselect';
 import {PayloadActionCreator} from 'typesafe-actions';
 import {
     useSelector,
     useDispatch,
 } from '../../core';
-import {PathGeneratorState} from '../../type';
+import {PathGeneratorState} from '../../types';
 import className from './style.css';
 
 export const InputSize = (
@@ -14,7 +14,7 @@ export const InputSize = (
         selector: Selector<PathGeneratorState, number>,
         action: PayloadActionCreator<'SetWidth' | 'SetHeight', number>,
     },
-) => {
+): ReactElement => {
     const value = useSelector(props.selector);
     const dispatch = useDispatch();
     return createElement(

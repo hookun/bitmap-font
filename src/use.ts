@@ -4,18 +4,23 @@ import {selectCharacter, selectMatrixData, selectFontName} from './selector';
 import {defaultMatixData, defaultMatrix} from './constants';
 import {decodeMatrix} from './matrix';
 import {calculatePath} from './util/calculatePath';
-import {createStore} from './util/createStore';
+import {createStore, LocalStore} from './util/createStore';
+
+export const useStore = <Type>(): LocalStore<Type> => {
+    const fontName = useSelector(selectFontName);
+    return useMemo(createStore, [fontName]) as LocalStore<Type>;
+};
 
 export const useMatrixData = (character: string): string => {
-    const store = useStore();
+    const store = useStore<string>();
     const [matrixData, setMatrixData] = useState<string>('');
     useEffect(() => {
-        store.get<string>(character)
+        store.get(character)
         .then((matrixData) => {
             setMatrixData(matrixData || defaultMatixData[character] || '');
         })
         .catch(console.error);
-    }, [character]);
+    }, [character, store]);
     const currentCharacter = useSelector(selectCharacter);
     const currentMatrixData = useSelector(selectMatrixData);
     useEffect(() => {
@@ -26,7 +31,11 @@ export const useMatrixData = (character: string): string => {
     return matrixData;
 };
 
-export const useMatrix = (character: string) => {
+export interface MatrixData extends ReturnType<typeof decodeMatrix> {
+    matrixData: string,
+}
+
+export const useMatrix = (character: string): MatrixData => {
     const matrixData = useMatrixData(character);
     return {
         matrixData,
@@ -34,16 +43,15 @@ export const useMatrix = (character: string) => {
     };
 };
 
-export const useMatrixAndPath = (character: string) => {
+export interface MatrixDataAndPath extends MatrixData {
+    d: string,
+}
+
+export const useMatrixAndPath = (character: string): MatrixDataAndPath => {
     const matrixData = useMatrix(character);
     const d = useMemo(
         () => calculatePath(matrixData.matrix, matrixData.width),
         [matrixData.matrix, matrixData.width],
     );
     return {...matrixData, d};
-};
-
-export const useStore = () => {
-    const fontName = useSelector(selectFontName);
-    return useMemo(createStore, [fontName]);
 };

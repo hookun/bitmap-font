@@ -15,13 +15,14 @@ export class PathString {
         this.fragments = [];
     }
 
-    public moveTo(x: number, y: number) {
+    public moveTo(x: number, y: number): PathString {
         this.x = x;
         this.y = y;
         this.fragments.push(`M${x} ${y}`);
+        return this;
     }
 
-    public lineBy(dx: number, dy: number) {
+    public lineBy(dx: number, dy: number): PathString {
         this.x += dx;
         this.y += dy;
         this.length += Math.hypot(dx, dy);
@@ -39,14 +40,14 @@ export class PathString {
         return this;
     }
 
-    public close() {
+    public close(): PathString {
         if (0 < this.fragments.length) {
             this.fragments.push('z');
         }
         return this;
     }
 
-    public toString() {
+    public toString(): string {
         return this.fragments.join('');
     }
 

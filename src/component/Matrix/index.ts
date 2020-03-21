@@ -1,4 +1,4 @@
-import {createElement, MouseEvent} from 'react';
+import {createElement, MouseEvent, ReactElement} from 'react';
 import {classnames} from '../../util/classnames';
 import {filledArray} from '../../util/filledArray';
 import {
@@ -18,7 +18,7 @@ import {SetCell} from '../../action';
 import {PathView} from '../PathView';
 import className from './style.css';
 
-export const Matrix = () => {
+export const Matrix = (): ReactElement => {
     const width = useSelector(selectWidth);
     const height = useSelector(selectHeight);
     const arrowSize = useSelector(selectArrowSize);

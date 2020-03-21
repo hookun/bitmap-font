@@ -7,7 +7,7 @@ export const encodeMatrix = (
     matrix: Array<boolean>,
     width: number,
     height: number,
-) => {
+): string => {
     const data: Array<string> = [];
     for (let index = 0; index < matrix.length; index += chunkSize) {
         const bits = matrix.slice(index, index + chunkSize).reduce(
@@ -19,7 +19,13 @@ export const encodeMatrix = (
     return `${width}x${height}|${data.join('')}`;
 };
 
-export const decodeMatrix = (data: string) => {
+export interface DecodedMatrix {
+    matrix: Array<boolean>,
+    width: number,
+    height: number,
+}
+
+export const decodeMatrix = (data: string): DecodedMatrix => {
     if (!data) {
         return {matrix: filledArray(81, false), width: 9, height: 9};
     }
@@ -32,5 +38,5 @@ export const decodeMatrix = (data: string) => {
             matrix.push(Boolean((bits >> shift) & 1));
         }
     }
-    return {matrix: matrix.slice(0, width * height), width, height}
+    return {matrix: matrix.slice(0, width * height), width, height};
 };
