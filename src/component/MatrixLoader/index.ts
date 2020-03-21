@@ -1,4 +1,4 @@
-import {createElement, FormEvent, useRef, useEffect, ReactElement} from 'react';
+import {createElement, FormEvent, useRef, useEffect, ReactElement, useCallback} from 'react';
 import {useDispatch, useSelector} from '../../core';
 import {LoadMatrixData} from '../../action';
 import className from './style.css';
@@ -18,14 +18,17 @@ export const MetrixLoader = (): ReactElement => {
         'form',
         {
             className: className.form,
-            onSubmit: (event: FormEvent) => {
-                event.preventDefault();
-                const input = event.currentTarget.querySelector<HTMLInputElement>('[name=matrixData]');
-                if (input) {
-                    dispatch(LoadMatrixData(input.value));
-                    input.value = '';
-                }
-            },
+            onSubmit: useCallback(
+                (event: FormEvent) => {
+                    event.preventDefault();
+                    const input = event.currentTarget.querySelector<HTMLInputElement>('[name=matrixData]');
+                    if (input) {
+                        dispatch(LoadMatrixData(input.value));
+                        input.value = '';
+                    }
+                },
+                [dispatch],
+            ),
         },
         createElement(
             'input',

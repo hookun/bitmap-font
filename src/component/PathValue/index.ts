@@ -1,4 +1,4 @@
-import {createElement} from 'react';
+import {createElement, useCallback, ReactElement} from 'react';
 import {useSelector} from '../../core';
 import {selectPathD} from '../../selector';
 import className from './style.css';
@@ -12,9 +12,10 @@ export const PathValue = (): ReactElement => {
             className: className.container,
             value: d,
             readOnly: true,
-            onClick: (event) => {
-                event.currentTarget.select();
-            },
+            onClick: useCallback(
+                (event) => event.currentTarget.select(),
+                [],
+            ),
         },
     );
 };

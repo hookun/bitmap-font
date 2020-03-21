@@ -1,4 +1,4 @@
-import {createElement, Fragment, ReactElement} from 'react';
+import {createElement, Fragment, ReactElement, useCallback, MouseEvent} from 'react';
 import {useSelector, useDispatch} from '../../core';
 import {selectPage, selectPageCharacters, selectCharacter} from '../../selector';
 import {useMatrixAndPath, useStore} from '../../use';
@@ -15,6 +15,16 @@ export const CharacterPreview = ({character}: {character: string}): ReactElement
     const size = Math.max(width, height);
     const dispatch = useDispatch();
     const textHeight = size * 0.4;
+    const onSelect = useCallback(
+        () => {
+            store.get(character)
+            .then((matrixData) => {
+                dispatch(SetCharacter({character, matrixData}));
+            })
+            .catch(console.error);
+        },
+        [store, dispatch, character],
+    );
     if (!character) {
         return createElement('div', {className: className.svg});
     }
@@ -26,13 +36,7 @@ export const CharacterPreview = ({character}: {character: string}): ReactElement
                 currentCharacter === character && className.selected,
             ),
             viewBox: `-1 -1 ${size + 2} ${size + 2 + textHeight}`,
-            onClick: () => {
-                store.get(character)
-                .then((matrixData) => {
-                    dispatch(SetCharacter({character, matrixData}));
-                })
-                .catch(console.error);
-            },
+            onClick: onSelect,
         },
         createElement(
             'text',
@@ -60,6 +64,17 @@ export const PageSelector = (): ReactElement => {
     const currentCharacter = useSelector(selectCharacter);
     const store = useStore<string>();
     const dispatch = useDispatch();
+    const onClick = useCallback(
+        (event: MouseEvent<HTMLButtonElement>) => {
+            const index = pages[currentPage].join('').indexOf(currentCharacter);
+            const page = event.currentTarget.value as CharacterPage;
+            const character = (index < 0 ? '' : pages[page].join('')[index]).trim();
+            store.get(character)
+            .then((matrixData) => dispatch(SetPage({page, character, matrixData})))
+            .catch(console.error);
+        },
+        [currentCharacter, currentPage, store, dispatch],
+    );
     return createElement(
         'div',
         {className: className.pages},
@@ -70,13 +85,8 @@ export const PageSelector = (): ReactElement => {
                     className.page,
                     currentPage === page && className.selected,
                 ),
-                onClick: () => {
-                    const index = pages[currentPage].join('').indexOf(currentCharacter);
-                    const character = (index < 0 ? '' : pages[page].join('')[index]).trim();
-                    store.get(character)
-                    .then((matrixData) => dispatch(SetPage({page, character, matrixData})))
-                    .catch(console.error);
-                },
+                value: page,
+                onClick,
             },
             page,
         )),

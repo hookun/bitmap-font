@@ -1,4 +1,4 @@
-import {createElement, Fragment, ReactElement} from 'react';
+import {createElement, Fragment, ReactElement, useCallback, MouseEvent} from 'react';
 import {useSelector, useDispatch} from '../../core';
 import {selectEditableCharacterArray, selectExportFormat} from '../../selector';
 import {useMatrixData, useMatrixAndPath} from '../../use';
@@ -89,6 +89,13 @@ export const ExportResult = ({format}: {format: string}): ReactElement => {
 export const ExportFormatList = (): ReactElement => {
     const currentFormat = useSelector(selectExportFormat);
     const dispatch = useDispatch();
+    const onClick = useCallback(
+        (event: MouseEvent<HTMLButtonElement>) => {
+            const format = event.currentTarget.value;
+            dispatch(SetExportFormat(format));
+        },
+        [dispatch],
+    );
     return createElement(
         'div',
         {className: className.formats},
@@ -96,11 +103,12 @@ export const ExportFormatList = (): ReactElement => {
             return createElement(
                 'button',
                 {
+                    value: format,
                     className: classnames(
                         className.format,
                         currentFormat === format && className.selected,
                     ),
-                    onClick: () => dispatch(SetExportFormat(format)),
+                    onClick,
                 },
                 format || 'なし',
             );

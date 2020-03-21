@@ -1,4 +1,4 @@
-import {createElement, MouseEvent, ReactElement} from 'react';
+import {createElement, MouseEvent, ReactElement, useCallback} from 'react';
 import {classnames} from '../../util/classnames';
 import {filledArray} from '../../util/filledArray';
 import {
@@ -27,6 +27,15 @@ export const Matrix = (): ReactElement => {
     const cellNumber = useSelector(selectCellNumber);
     const grid = useSelector(selectGrid);
     const dispatch = useDispatch();
+    const onClick = useCallback(
+        (event: MouseEvent<HTMLButtonElement>) => {
+            const button = event.currentTarget;
+            const index = Number(button.getAttribute('data-index'));
+            const value = button.value === '1';
+            dispatch(SetCell(index, !value));
+        },
+        [dispatch],
+    );
     return createElement(
         'div',
         {
@@ -55,11 +64,10 @@ export const Matrix = (): ReactElement => {
             ...matrix.map((value, index) => createElement(
                 'button',
                 {
+                    'data-index': index,
+                    value: value ? 1 : 0,
                     className: classnames(className.cell, value && className.filled),
-                    onClick: (event: MouseEvent<HTMLButtonElement, MouseEvent>) => {
-                        event.preventDefault();
-                        dispatch(SetCell(index, !value));
-                    },
+                    onClick,
                 }
             )),
         ),

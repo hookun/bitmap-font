@@ -1,4 +1,4 @@
-import {createElement, Fragment, ReactElement} from 'react';
+import {createElement, Fragment, ReactElement, useCallback} from 'react';
 import {Selector} from 'reselect';
 import {PayloadActionCreator} from 'typesafe-actions';
 import {
@@ -9,13 +9,13 @@ import {PathGeneratorState} from '../../types';
 import className from './style.css';
 
 export const InputSize = (
-    props: {
+    {label, selector, action}: {
         label: string,
         selector: Selector<PathGeneratorState, number>,
         action: PayloadActionCreator<'SetWidth' | 'SetHeight', number>,
     },
 ): ReactElement => {
-    const value = useSelector(props.selector);
+    const value = useSelector(selector);
     const dispatch = useDispatch();
     return createElement(
         Fragment,
@@ -25,7 +25,10 @@ export const InputSize = (
             {
                 title: 'ふやす',
                 className: className.button,
-                onClick: () => dispatch(props.action(value + 1)),
+                onClick: useCallback(
+                    () => dispatch(action(value + 1)),
+                    [dispatch, action, value],
+                ),
             },
             createElement(
                 'svg',
@@ -33,13 +36,16 @@ export const InputSize = (
                 createElement('path', {d: 'M5 0V10M0 5H10'}),
             ),
         ),
-        createElement('div', null, `${props.label}${value}`),
+        createElement('div', null, `${label}${value}`),
         createElement(
             'button',
             {
                 title: 'へらす',
                 className: className.button,
-                onClick: () => dispatch(props.action(value - 1)),
+                onClick: useCallback(
+                    () => dispatch(action(value - 1)),
+                    [dispatch, action, value],
+                ),
             },
             createElement(
                 'svg',
