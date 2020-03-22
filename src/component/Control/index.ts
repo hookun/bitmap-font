@@ -3,7 +3,7 @@ import {InputSize} from '../InputSize';
 import {
     useDispatch,
     useSelector,
-} from '../../core';
+} from '../../old-core';
 import {
     selectCellNumber,
     selectPathDirection,

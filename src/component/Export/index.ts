@@ -1,5 +1,5 @@
 import {createElement, Fragment, ReactElement, useCallback, MouseEvent} from 'react';
-import {useSelector, useDispatch} from '../../core';
+import {useSelector, useDispatch} from '../../old-core';
 import {selectEditableCharacterArray, selectExportFormat} from '../../selector';
 import {useMatrixData, useMatrixAndPath} from '../../use';
 import {ExportFormat} from '../../constants';

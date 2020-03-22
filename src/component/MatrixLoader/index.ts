@@ -1,5 +1,5 @@
 import {createElement, FormEvent, useRef, useEffect, ReactElement, useCallback} from 'react';
-import {useDispatch, useSelector} from '../../core';
+import {useDispatch, useSelector} from '../../old-core';
 import {LoadMatrixData} from '../../action';
 import className from './style.css';
 import {selectMatrixData} from '../../selector';

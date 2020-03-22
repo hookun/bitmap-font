@@ -1,5 +1,5 @@
 import {createElement, useCallback, ReactElement} from 'react';
-import {useSelector} from '../../core';
+import {useSelector} from '../../old-core';
 import {selectPathD} from '../../selector';
 import className from './style.css';
 

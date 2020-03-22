@@ -1,5 +1,5 @@
 import {createElement, Fragment, ReactElement} from 'react';
-import {useSelector} from '../../core';
+import {useSelector} from '../../old-core';
 import {
     selectWidth,
     selectHeight,

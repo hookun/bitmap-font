@@ -1,6 +1,6 @@
 import {createElement, useReducer} from 'react';
 import {render} from 'react-dom';
-import {createInitialState, StateContext} from './core';
+import {createInitialState, StateContext} from './old-core';
 import {pathGeneratorReducer} from './reducer';
 import {Application} from './component/Application';
 import {SideEffects} from './SideEffect';

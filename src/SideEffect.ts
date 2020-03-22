@@ -1,5 +1,5 @@
 import {useEffect, createElement, Fragment, ReactElement} from 'react';
-import {useSelector} from './core';
+import {useSelector} from './old-core';
 import {selectCharacter, selectMatrixData} from './selector';
 import {useStore} from './use';
 

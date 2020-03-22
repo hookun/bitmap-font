@@ -4,7 +4,7 @@ import {filledArray} from '../../util/filledArray';
 import {
     useSelector,
     useDispatch,
-} from '../../core';
+} from '../../old-core';
 import {
     selectWidth,
     selectHeight,

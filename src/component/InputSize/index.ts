@@ -4,7 +4,7 @@ import {PayloadActionCreator} from 'typesafe-actions';
 import {
     useSelector,
     useDispatch,
-} from '../../core';
+} from '../../old-core';
 import {PathGeneratorState} from '../../types';
 import className from './style.css';
 

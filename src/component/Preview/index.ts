@@ -1,5 +1,5 @@
 import {createElement, Fragment, ReactElement, useCallback, MouseEvent} from 'react';
-import {useSelector, useDispatch} from '../../core';
+import {useSelector, useDispatch} from '../../old-core';
 import {selectPage, selectPageCharacters, selectCharacter} from '../../selector';
 import {useMatrixAndPath, useStore} from '../../use';
 import className from './style.css';

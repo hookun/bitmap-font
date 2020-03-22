@@ -1,5 +1,5 @@
 import {useState, useEffect, useMemo} from 'react';
-import {useSelector} from './core';
+import {useSelector} from './old-core';
 import {selectCharacter, selectMatrixData, selectFontName} from './selector';
 import {defaultMatixData, defaultMatrix} from './constants';
 import {decodeMatrix} from './matrix';
