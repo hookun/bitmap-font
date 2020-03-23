@@ -1,5 +1,5 @@
 import {createSelector} from 'reselect';
-import {PathGeneratorState, CharacterPage} from './types';
+import {PathGeneratorState, CharacterPage} from './type';
 import {encodeMatrix} from './matrix';
 import {calculatePath} from './util/calculatePath';
 import {pages} from './constants';

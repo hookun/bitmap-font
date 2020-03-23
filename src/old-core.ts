@@ -2,7 +2,7 @@ import * as idb from 'idb-keyval';
 import {useContext, createContext, Dispatch} from 'react';
 import {Selector} from 'reselect';
 import {decodeMatrix} from './matrix';
-import {PathGeneratorState} from './types';
+import {PathGeneratorState} from './type';
 import {PathGeneratorAction} from './action';
 import {createStore} from './util/createStore';
 import {defaultMatrix, defaultMatixData} from './constants';

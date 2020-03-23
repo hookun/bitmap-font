@@ -5,7 +5,7 @@ import {
     useSelector,
     useDispatch,
 } from '../../old-core';
-import {PathGeneratorState} from '../../types';
+import {PathGeneratorState} from '../../type';
 import className from './style.css';
 
 export const InputSize = (

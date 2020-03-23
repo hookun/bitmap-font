@@ -1,7 +1,8 @@
 import {createElement, useCallback, ReactElement} from 'react';
+import {useDispatch} from 'react-redux';
 import {InputSize} from '../InputSize';
 import {
-    useDispatch,
+    useDispatch as useLocalDispatch,
     useSelector,
 } from '../../old-core';
 import {
@@ -14,15 +15,16 @@ import {
 import {
     SetWidth,
     SetHeight,
-    SetCellNumber,
     SetPathDirection,
     SetGrid,
 } from '../../action';
 import {Checkbox} from '../Checkbox';
+import {SetGuideCellId} from '../../core/Guide/action';
 import className from './style.css';
 
 export const Control = (): ReactElement => {
     const dispatch = useDispatch();
+    const localDispatch = useLocalDispatch();
     const cellNumber = useSelector(selectCellNumber);
     const pathDirection = useSelector(selectPathDirection);
     const grid = useSelector(selectGrid);
@@ -33,7 +35,7 @@ export const Control = (): ReactElement => {
             checked: cellNumber,
             label: 'マスの番号',
             onChange: useCallback(
-                (checked) => dispatch(SetCellNumber(checked)),
+                (checked) => dispatch(SetGuideCellId(!checked)),
                 [dispatch],
             ),
         }),
@@ -41,16 +43,16 @@ export const Control = (): ReactElement => {
             checked: pathDirection,
             label: 'パスの方向',
             onChange: useCallback(
-                (checked) => dispatch(SetPathDirection(checked)),
-                [dispatch],
+                (checked) => localDispatch(SetPathDirection(checked)),
+                [localDispatch],
             ),
         }),
         createElement(Checkbox, {
             checked: grid,
             label: '罫線',
             onChange: useCallback(
-                (checked) => dispatch(SetGrid(checked)),
-                [dispatch],
+                (checked) => localDispatch(SetGrid(checked)),
+                [localDispatch],
             ),
         }),
         createElement(InputSize, {label: '横', selector: selectWidth, action: SetWidth}),

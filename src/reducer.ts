@@ -2,7 +2,7 @@ import {Reducer} from 'react';
 import {createReducer} from 'typesafe-actions';
 import {filledArray} from './util/filledArray';
 import {decodeMatrix} from './matrix';
-import {PathGeneratorState} from './types';
+import {PathGeneratorState} from './type';
 import {
     PathGeneratorAction,
     SetWidth,

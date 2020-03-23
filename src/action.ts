@@ -1,5 +1,5 @@
 import {createAction, ActionType} from 'typesafe-actions';
-import {CharacterPage} from './types';
+import {CharacterPage} from './type';
 
 export const SetWidth = createAction('SetWidth')<number>();
 export const SetHeight = createAction('SetHeight')<number>();

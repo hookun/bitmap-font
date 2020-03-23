@@ -5,7 +5,7 @@ import {useMatrixAndPath, useStore} from '../../use';
 import className from './style.css';
 import {pages} from '../../constants';
 import {SetCharacter, SetPage} from '../../action';
-import {CharacterPage} from '../../types';
+import {CharacterPage} from '../../type';
 import {classnames} from '../../util/classnames';
 
 export const CharacterPreview = ({character}: {character: string}): ReactElement => {

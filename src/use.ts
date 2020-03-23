@@ -5,6 +5,7 @@ import {defaultMatixData, defaultMatrix} from './constants';
 import {decodeMatrix} from './matrix';
 import {calculatePath} from './util/calculatePath';
 import {createStore, LocalStore} from './util/createStore';
+import {PathString} from './util/PathString';
 
 export const useStore = <Type>(): LocalStore<Type> => {
     const fontName = useSelector(selectFontName);
@@ -44,7 +45,7 @@ export const useMatrix = (character: string): MatrixData => {
 };
 
 export interface MatrixDataAndPath extends MatrixData {
-    d: string,
+    d: PathString,
 }
 
 export const useMatrixAndPath = (character: string): MatrixDataAndPath => {
