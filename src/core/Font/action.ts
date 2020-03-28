@@ -2,7 +2,8 @@
 import {createAction} from 'typesafe-actions';
 import {FontState} from './type';
 
-export const $SetFont = createAction('$SetFont')<FontState>();
+export const SagaSetFont = createAction('SagaSetFont')<FontState>();
 export const SetFontName = createAction('SetFontName')<string>();
 export const SetFontAscent = createAction('SetFontAscent')<number>();
 export const SetFontDescent = createAction('SetFontDescent')<number>();
+export const PickCharacter = createAction('PickCharacter')<number>();

@@ -1,9 +1,8 @@
 .container {
     display: grid;
-    grid-template-columns: 7rem repeat(2, 2rem) 1fr;
-    grid-template-rows: repeat(3, 1fr);
-    grid-auto-flow: column;
-    column-gap: var(--ButtonGap);
+    grid-template-columns: repeat(3, minmax(min-content, max-content)) 1fr;
+    grid-template-rows: repeat(1, minmax(min-content, max-content));
+    column-gap: calc(var(--ButtonGap) * 2);
     align-items: center;
     justify-items: center;
     width: var(--BaseWidth);

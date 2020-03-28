@@ -1,7 +1,12 @@
 {
     "compilerOptions": {
         "target": "ESNext",
-        "moduleResolution": "Node"
+        "moduleResolution": "Node",
+        "baseUrl": ".",
+        "paths": {
+            "@hookun/util/*": ["node_modules/@hookun/builder/lib/util/*"],
+            "@hookun/domutil/*": ["node_modules/@hookun/builder/lib/domutil/*"]
+        }
     },
     "include": [
         "src/**/*.ts",

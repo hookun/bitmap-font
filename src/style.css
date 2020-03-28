@@ -1,4 +1,5 @@
 :root {
+    --MaxWidth: 92vw;
     --BorderRadius: 0.2rem;
     --ButtonGap: 0.3rem;
     --ButtonPaddingH: 0.8rem;

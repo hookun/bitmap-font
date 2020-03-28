@@ -2,6 +2,11 @@
     --Size: 1rem;
     display: flex;
     align-items: center;
+    &:active {
+        &>.check {
+            transform: scale(0.8);
+        }
+    }
 }
 
 .check {
@@ -10,4 +15,5 @@
     fill: none;
     stroke: currentColor;
     margin-right: var(--ButtonGap);
+    transition: transform 0.1s;
 }

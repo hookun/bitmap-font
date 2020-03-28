@@ -7,15 +7,14 @@ import {list as listFontSaga} from './Font/saga';
 import {list as listGlyphSaga} from './Glyph/saga';
 import {Restart} from './action';
 
+export const reducer = combineReducers({
+    Font: FontReducer,
+    Guide: GuideReducer,
+});
+
 export const setup = (): Store => {
     const sagaMiddleware = createSagaMiddleware();
-    const store = createStore(
-        combineReducers({
-            Font: FontReducer,
-            Guide: GuideReducer,
-        }),
-        applyMiddleware(sagaMiddleware),
-    );
+    const store = createStore(reducer, applyMiddleware(sagaMiddleware));
     sagaMiddleware.run((function* () {
         yield all([
             ...listFontSaga(),
@@ -25,3 +24,6 @@ export const setup = (): Store => {
     store.dispatch(Restart());
     return store;
 };
+
+export type BMFState = ReturnType<typeof reducer>;
+export type BMFSelector<Type> = (state: BMFState) => Type;

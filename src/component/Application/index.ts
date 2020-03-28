@@ -1,18 +1,26 @@
 import {createElement, Fragment, ReactElement} from 'react';
 import {Control} from '../Control';
-import {Matrix} from '../Matrix';
-import {MetrixLoader} from '../MatrixLoader';
-import {Preview} from '../Preview';
-import {Export} from '../Export';
-import {PathValue} from '../PathValue';
+import {GlyphSelector} from '../GlyphSelector';
+import {GlyphEditor} from '../GlyphEditor';
+import {useSelector} from 'react-redux';
+import {selectFontEdting} from '../../core/Font/selector';
 
-export const Application = (): ReactElement => createElement(
-    Fragment,
-    null,
-    createElement(Control),
-    createElement(MetrixLoader),
-    createElement(Matrix),
-    createElement(PathValue),
-    createElement(Preview),
-    createElement(Export),
-);
+export const Application = (): ReactElement => {
+    const codePointList = useSelector(selectFontEdting);
+    console.log({codePointList});
+    return createElement(
+        Fragment,
+        null,
+        createElement(Control),
+        createElement(
+            'div',
+            {
+                children: codePointList.map((codePoint) => createElement(
+                    GlyphEditor,
+                    {key: codePoint, codePoint},
+                )),
+            },
+        ),
+        createElement(GlyphSelector),
+    );
+};
