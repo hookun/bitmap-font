@@ -8,7 +8,8 @@ import {
     SetFontName,
     SetFontAscent,
     SetFontDescent,
-    PickCharacter,
+    OpenEditor,
+    CloseEditor,
 } from '../action';
 
 export const list = () => [
@@ -19,7 +20,8 @@ export const list = () => [
         [
             SetFontAscent,
             SetFontDescent,
-            PickCharacter,
+            OpenEditor,
+            CloseEditor,
         ].map(getType),
         onUpdateFont,
     ),

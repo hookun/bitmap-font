@@ -24,7 +24,7 @@ const ranges = [
     [0xA490, 0xD7A3],
 ];
 
-export const usePrintability = (codePoint: number): boolean => {
+export const isPrintable = (codePoint: number): boolean => {
     if (MaxCodePoint < codePoint) {
         return false;
     }

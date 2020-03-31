@@ -1,4 +1,8 @@
 .container {
+    --Padding: 0;
+    z-index: 1;
+    position: sticky;
+    top: -1px;
     display: grid;
     grid-template-columns: repeat(3, minmax(min-content, max-content)) 1fr;
     grid-template-rows: repeat(1, minmax(min-content, max-content));
@@ -6,17 +10,13 @@
     align-items: center;
     justify-items: center;
     width: var(--BaseWidth);
-    margin: 1rem auto;
-}
-
-.container>button {
-    width: 100%;
-    height: 100%;
-}
-
-.reset {
-    justify-self: start;
-    padding: var(--ButtonPaddingV) var(--ButtonPaddingH);
-    border: 1px solid currentColor;
-    border-radius: var(--BorderRadius);
+    padding: calc(0.5rem + 1px) var(--Padding) 0.5rem var(--Padding);
+    margin: 0.5rem auto;
+    background-color: var(--BackgroundColor);
+    &.stuck {
+        --Padding: calc(50% - var(--BaseWidth) / 2);
+        width: 100%;
+        box-shadow: 0 0 2px var(--ForegroundColor);
+        transition: box-shadow 0.1s;
+    }
 }

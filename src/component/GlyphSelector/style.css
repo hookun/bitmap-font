@@ -1,19 +1,82 @@
+.header {
+    --InputHeight: 2rem;
+    --Gap: 0.6rem;
+    display: grid;
+    grid-template-columns: 6rem 1fr;
+    grid-template-rows: calc(var(--InputHeight) + var(--Gap));
+    column-gap: var(--Gap);
+    margin-left: calc(50% - var(--BaseWidth) / 2);
+}
+
+.form {
+    align-self: start;
+    justify-self: end;
+    display: grid;
+    height: var(--InputHeight);
+    grid-template-columns: 1fr minmax(min-content, max-content);
+    align-items: stretch;
+    &>input {
+        padding-left: 0.5rem;
+        border: 1px solid var(--ForegroundColor);
+        border-right-width: 0;
+        border-radius: var(--BorderRadius) 0 0 var(--BorderRadius);
+        line-height: var(--InputHeight);
+    }
+    &>button {
+        padding: 0 0.5rem;
+        border: 1px solid var(--ForegroundColor);
+        border-radius: 0 var(--BorderRadius) var(--BorderRadius) 0;
+    }
+}
+
+.range {
+    --Margin: 0.4rem;
+    align-self: stretch;
+    justify-self: stretch;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+    border: 1px solid var(--ForegroundColor);
+    border-bottom-width: 0;
+    border-radius: var(--BorderRadius) var(--BorderRadius) 0 0;
+    text-align: center;
+    font-size: 80%;
+    &>:first-child {
+        align-self: end;
+        justify-self: start;
+        content: attr(data-start) '...';
+        margin-left: var(--Margin);
+    }
+    &>:last-child {
+        align-self: start;
+        justify-self: end;
+        content: '...' attr(data-end);
+        margin-right: var(--Margin);
+    }
+}
+
 .container {
-    width: var(--MaxWidth);
-    height: 40vh;
-    margin: 1rem auto;
+    width: var(--BaseWidth);
+    height: 50vh;
+    margin: 0 auto 1rem auto;
+    &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        width: calc(var(--RowWidth) + 1px);
+        top: 0;
+        bottom: 0;
+        pointer-events: none;
+        border: 1px solid var(--ForegroundColor);
+    }
+    &.loading {
+        &::after {
+            display: none;
+        }
+    }
 }
 
 .grid {
-    background-image:
-        linear-gradient(0deg, var(--ForegroundColor), var(--ForegroundColor)),
-        linear-gradient(0deg, var(--ForegroundColor), var(--ForegroundColor));
-    background-size:
-        var(--RowWidth) 1px,
-        var(--RowWidth) 1px;
-    background-position:
-        left top,
-        left bottom;
     &>div {
         border: 1px solid var(--ForegroundColor);
         border-width: 0 1px 1px 0;

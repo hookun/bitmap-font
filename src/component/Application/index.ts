@@ -1,13 +1,13 @@
 import {createElement, Fragment, ReactElement} from 'react';
+import {useSelector} from 'react-redux';
 import {Control} from '../Control';
 import {GlyphSelector} from '../GlyphSelector';
 import {GlyphEditor} from '../GlyphEditor';
-import {useSelector} from 'react-redux';
 import {selectFontEdting} from '../../core/Font/selector';
+import className from './style.css';
 
 export const Application = (): ReactElement => {
     const codePointList = useSelector(selectFontEdting);
-    console.log({codePointList});
     return createElement(
         Fragment,
         null,
@@ -15,6 +15,7 @@ export const Application = (): ReactElement => {
         createElement(
             'div',
             {
+                className: className.editors,
                 children: codePointList.map((codePoint) => createElement(
                     GlyphEditor,
                     {key: codePoint, codePoint},

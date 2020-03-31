@@ -1,13 +1,13 @@
 import {waitTransactionCompletion} from '../../../util/DBStore';
 import {DB} from '../../type';
 
-export const loadLastFontName = async (
+export const saveLastFontName = async (
     {names, store}: DB,
-): Promise<string> => {
+    fontName: string,
+): Promise<void> => {
     const database = await store.open();
     const storeName = names.app;
-    const tr = database.transaction(storeName, 'readonly');
-    const req = tr.objectStore(storeName).get('fontName');
+    const tr = database.transaction(storeName, 'readwrite');
+    tr.objectStore(storeName).put(fontName, 'fontName');
     await waitTransactionCompletion(tr);
-    return req.result || 'MyFont';
 };

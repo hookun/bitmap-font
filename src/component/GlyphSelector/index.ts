@@ -5,6 +5,9 @@ import {
     useEffect,
     useMemo,
     useCallback,
+    useState,
+    Fragment,
+    FormEvent,
 } from 'react';
 import {useDispatch} from 'react-redux';
 import {
@@ -16,9 +19,11 @@ import className from './style.css';
 import {getRectSize, useRectSize} from '../../use/RectSize';
 import {useColor} from '../../use/Color';
 import {useScrollBarSize} from '../../use/ScrollBarSize';
-import {usePrintability} from '../../use/Printability';
 import {MaxCodePoint} from '../../constants';
-import {PickCharacter} from '../../core/Font/action';
+import {OpenEditor, OpenEditors} from '../../core/Font/action';
+import {toHex} from '../../util/codePoint';
+import {isPrintable} from '../../util/isPrintable';
+import {classnames} from '../../util/classnames';
 
 export const GlyphSelectorCell = (
     {
@@ -42,8 +47,8 @@ export const GlyphSelectorCell = (
 ): ReactElement => {
     const ref = useRef<HTMLCanvasElement>();
     const codePoint = rowIndex * columnCount + columnIndex;
-    const printable = usePrintability(codePoint);
-    const hex = codePoint.toString(16).padStart(4, '0').toUpperCase();
+    const printable = isPrintable(codePoint);
+    const hex = toHex(codePoint);
     useEffect(() => {
         if (printable) {
             const {width, height, element: canvas} = getRectSize(ref);
@@ -68,10 +73,10 @@ export const GlyphSelectorCell = (
                 }
             }
         }
-    }, [ref, codePoint, printable, hex, headerHeight, color, inverseColor]);
+    }, [ref, codePoint, printable, headerHeight, color, inverseColor]);
     const dispatch = useDispatch();
     const onClick = useCallback(() => {
-        dispatch(PickCharacter(codePoint));
+        dispatch(OpenEditor(codePoint));
     }, [dispatch, codePoint]);
     if (MaxCodePoint < codePoint) {
         return null;
@@ -98,7 +103,46 @@ export const GlyphSelectorCell = (
     );
 };
 
+export const GlyphForm = (): ReactElement => {
+    const ref = useRef<HTMLInputElement>();
+    const dispatch = useDispatch();
+    return createElement(
+        'form',
+        {
+            className: className.form,
+            onSubmit: (event: FormEvent<HTMLFormElement>) => {
+                event.preventDefault();
+                const {value} = ref.current;
+                if (value) {
+                    dispatch(OpenEditors(value));
+                }
+                event.currentTarget.reset();
+            },
+        },
+        createElement(
+            'input',
+            {
+                ref,
+                type: 'text',
+                defaultValue: '',
+                placeholder: 'あいうえお',
+            },
+        ),
+        createElement(
+            'button',
+            {
+                type: 'submit',
+            },
+            '編集',
+        ),
+    );
+};
+
 export const GlyphSelector = (): ReactElement => {
+    const [
+        [firstCodePoint, lastCodePoint],
+        setCodePointRange,
+    ] = useState<[number, number]>([0, 0]);
     const ref = useRef();
     const headerHeight = 18;
     const color = useColor(ref);
@@ -129,21 +173,52 @@ export const GlyphSelector = (): ReactElement => {
                 color: `rgb(${color.join(',')})`,
                 inverseColor: `rgb(${color.map((x) => 255 - x).join(',')})`,
             },
+            onItemsRendered: ({
+                visibleRowStartIndex,
+                visibleColumnStartIndex,
+                visibleRowStopIndex,
+                visibleColumnStopIndex,
+            }): void => setCodePointRange([
+                (visibleRowStartIndex + 1) * columnCount + visibleColumnStartIndex,
+                (visibleRowStopIndex - 1) * columnCount + visibleColumnStopIndex,
+            ]),
         };
     }, [width, height, scrollBarWidth, color]);
+    const RowWidth = props ? props.columnCount * props.columnWidth : 0;
     return createElement(
-        'div',
-        {
-            ref,
-            className: className.container,
-            style: props && {
-                '--HeaderHeight': `${headerHeight}px`,
-                '--Background': `rgba(${color.concat(0.15).join(',')})`,
-                '--CellWidth': `${props.columnWidth}px`,
-                '--CellHeight': `${props.rowHeight}px`,
-                '--RowWidth': `${props.columnCount * props.columnWidth}px`,
+        Fragment,
+        null,
+        0 < RowWidth && createElement(
+            'div',
+            {
+                className: className.header,
+                style: {width: `${RowWidth + 1}px`},
             },
-        },
-        props && createElement(FixedSizeGrid, props),
+            createElement(
+                'div',
+                {className: className.range},
+                createElement('div', null, `${toHex(firstCodePoint)} (${String.fromCodePoint(firstCodePoint)}) ...`),
+                createElement('div', null, `... (${String.fromCodePoint(lastCodePoint)}) ${toHex(lastCodePoint)}`),
+            ),
+            createElement(GlyphForm),
+        ),
+        createElement(
+            'div',
+            {
+                ref,
+                className: classnames(
+                    className.container,
+                    !props && className.loading,
+                ),
+                style: props && {
+                    '--HeaderHeight': `${headerHeight}px`,
+                    '--Background': `rgba(${color.concat(0.15).join(',')})`,
+                    '--CellWidth': `${props.columnWidth}px`,
+                    '--CellHeight': `${props.rowHeight}px`,
+                    '--RowWidth': `${RowWidth}px`,
+                },
+            },
+            props && createElement(FixedSizeGrid, props),
+        ),
     );
 };

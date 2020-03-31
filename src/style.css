@@ -1,10 +1,7 @@
 :root {
-    --MaxWidth: 92vw;
-    --BorderRadius: 0.2rem;
-    --ButtonGap: 0.3rem;
-    --ButtonPaddingH: 0.8rem;
-    --ButtonPaddingV: var(--ButtonGap);
-    --Orange: rgb(214, 148, 24);
+    --BaseWidth: 92vw;
+    --BorderRadius: 0.1rem;
+    --ButtonGap: 0.2rem;
 }
 
 main {
@@ -17,4 +14,12 @@ main>:first-child {
 
 h1, h2 {
     width: var(--BaseWidth);
+}
+
+button {
+    cursor: pointer;
+}
+
+input {
+    min-width: 0;
 }
