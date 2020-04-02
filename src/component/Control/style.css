@@ -1,5 +1,5 @@
 .container {
-    --Padding: 0;
+    --Padding: calc(50% - var(--BaseWidth) / 2);
     z-index: 1;
     position: sticky;
     top: -1px;
@@ -9,13 +9,11 @@
     column-gap: calc(var(--ButtonGap) * 2);
     align-items: center;
     justify-items: center;
-    width: var(--BaseWidth);
+    width: 100%;
     padding: calc(0.5rem + 1px) var(--Padding) 0.5rem var(--Padding);
     margin: 0.5rem auto;
     background-color: var(--BackgroundColor);
     &.stuck {
-        --Padding: calc(50% - var(--BaseWidth) / 2);
-        width: 100%;
         box-shadow: 0 0 2px var(--ForegroundColor);
         transition: box-shadow 0.1s;
     }

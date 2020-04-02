@@ -9,7 +9,7 @@ import {
     Fragment,
     FormEvent,
 } from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
     FixedSizeGrid,
     FixedSizeGridProps,
@@ -24,6 +24,7 @@ import {OpenEditor, OpenEditors} from '../../core/Font/action';
 import {toHex} from '../../util/codePoint';
 import {isPrintable} from '../../util/isPrintable';
 import {classnames} from '../../util/classnames';
+import {selectFontEdting} from '../../core/Font/selector';
 
 export const GlyphSelectorCell = (
     {
@@ -49,6 +50,7 @@ export const GlyphSelectorCell = (
     const codePoint = rowIndex * columnCount + columnIndex;
     const printable = isPrintable(codePoint);
     const hex = toHex(codePoint);
+    const codePointList = useSelector(selectFontEdting);
     useEffect(() => {
         if (printable) {
             const {width, height, element: canvas} = getRectSize(ref);
@@ -86,7 +88,10 @@ export const GlyphSelectorCell = (
             'canvas',
             {
                 ref,
-                className: className.cell,
+                className: classnames(
+                    className.cell,
+                    codePointList.includes(codePoint) && className.editing,
+                ),
                 title: hex,
                 style,
                 onClick,
@@ -197,8 +202,8 @@ export const GlyphSelector = (): ReactElement => {
             createElement(
                 'div',
                 {className: className.range},
-                createElement('div', null, `${toHex(firstCodePoint)} (${String.fromCodePoint(firstCodePoint)}) ...`),
-                createElement('div', null, `... (${String.fromCodePoint(lastCodePoint)}) ${toHex(lastCodePoint)}`),
+                createElement('div', null, `${toHex(firstCodePoint)} ...`),
+                createElement('div', null, `... ${toHex(lastCodePoint)}`),
             ),
             createElement(GlyphForm),
         ),
@@ -212,7 +217,6 @@ export const GlyphSelector = (): ReactElement => {
                 ),
                 style: props && {
                     '--HeaderHeight': `${headerHeight}px`,
-                    '--Background': `rgba(${color.concat(0.15).join(',')})`,
                     '--CellWidth': `${props.columnWidth}px`,
                     '--CellHeight': `${props.rowHeight}px`,
                     '--RowWidth': `${RowWidth}px`,

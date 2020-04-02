@@ -77,34 +77,35 @@
 }
 
 .grid {
+    --Selected: rgba(255, 0, 0, 0.25);
     &>div {
         border: 1px solid var(--ForegroundColor);
         border-width: 0 1px 1px 0;
         box-sizing: content-box;
         background-image:
-            linear-gradient(180deg, var(--Background), var(--Background) var(--HeaderHeight), transparent var(--HeaderHeight), transparent),
+            linear-gradient(90deg, var(--ForegroundColor), var(--ForegroundColor) 1px, transparent 1px, transparent),
             linear-gradient(180deg, var(--ForegroundColor), var(--ForegroundColor) 1px, transparent 1px, transparent),
-            linear-gradient(90deg, var(--ForegroundColor), var(--ForegroundColor) 1px, transparent 1px, transparent);
+            linear-gradient(180deg, var(--Gray), var(--Gray) var(--HeaderHeight), transparent var(--HeaderHeight), transparent);
         background-size:
+            var(--CellWidth) var(--CellHeight),
             100% var(--CellHeight),
-            100% var(--CellHeight),
-            var(--CellWidth) var(--CellHeight);
+            100% var(--CellHeight);
         background-repeat:
+            repeat,
             repeat-y,
-            repeat-y,
-            repeat;
+            repeat-y;
         background-position:
-            left 1px,
             left top,
-            left top;
+            left top,
+            left 1px;
     }
 }
 
 .cell {
-    &:hover {
-        background-image: linear-gradient(0deg, var(--Background), var(--Background));
-        background-size: calc(100% - 1px) calc(100% - 1px);
-        background-position: right bottom;
+    cursor: pointer;
+    &.editing {
+        background-color: var(--Selected);
+        cursor: default;
     }
 }
 

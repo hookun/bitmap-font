@@ -1,13 +1,32 @@
 .container {
-    --CharacterSize: 2.4em;
+    --CharacterSize: 2.4rem;
+    --MainLineColor: var(--ForegroundColor);
     display: grid;
     grid-template-columns: var(--CharacterSize) 1fr;
     column-gap: var(--EditorGap);
-    grid-template-rows: 1.4rem 1rem 12rem;
+    grid-template-rows: 1rem 1.4rem 1rem 12rem;
     grid-template-areas:
+        'message   message'
         'character name'
         'character hex'
         'editor    editor';
+    &.focused {
+        --MainLineColor: rgb(197, 32, 32);
+        &>.character:not(.opened) {
+            animation: 0.3s 1s AppealClickabiliy;
+            &:hover {
+                animation: none;
+            }
+        }
+    }
+}
+
+.message {
+    grid-area: message;
+    align-self: end;
+    padding-bottom: 0.2rem;
+    font-size: 0.8rem;
+    line-height: 1;
 }
 
 .character {
@@ -15,39 +34,55 @@
     display: grid;
     align-items: center;
     justify-items: center;
-    color: var(--BackgroundColor);
-    background-color: var(--ForegroundColor);
+    color: var(--ForegroundColor);
     font-size: 1.2rem;
     font-weight: bold;
+    transition: transform 0.1s, border-radius 0s;
+    transition-delay: 0s, 0.2s;
     border-radius: var(--BorderRadius);
-    border-top-left-radius: 0;
-    transition: transform 0.1s;
-    &:hover {
-        background-color: transparent;
-        color: transparent;
-        border: 1px solid var(--ForegroundColor);
-        &>.close {
-            transform: scale(1);
-            stroke: var(--ForegroundColor);
-            stroke-width: 1.5;
+    box-shadow: 0 0 0 1px var(--ForegroundColor) inset;
+    overflow: hidden;
+    &:active {
+        transform: scale(0.9);
+    }
+    &>svg {
+        fill: none;
+        stroke: var(--ForegroundColor);
+        stroke-width: 1;
+    }
+    &>div {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: var(--CharacterSize);
+        color: var(--BackgroundColor);
+        background-color: var(--ForegroundColor);
+        transition: height 0.2s, left 0s, right 0s, background-color 0s;
+        overflow: hidden;
+        &::before {
+            content: attr(data-character);
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: var(--CharacterSize);
+            display: grid;
+            align-items: center;
+            justify-items: center;
         }
     }
-    &:active {
-        transform: scale(0.8);
+    &.opened {
+        border-radius: var(--BorderRadius) var(--BorderRadius) 0 0;
+        transition-delay: 0s, 0s;
+        &>div {
+            left: 1px;
+            right: 1px;
+            height: 1px;
+            background-color: var(--BackgroundColor);
+            transition-delay: 0s, 0.2s, 0.2s, 0.2s;
+        }
     }
-}
-
-.close {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    fill: none;
-    stroke: var(--BackgroundColor);
-    stroke-width: 2.5;
-    transform-origin: left top;
-    transform: translate(1px, 1px) scale(0.25);
 }
 
 .name {
@@ -73,9 +108,63 @@
     grid-area: editor;
     margin-top: var(--EditorGap);
     background-image:
-        linear-gradient(270deg, red, red 1px, transparent 1px);
+        linear-gradient(270deg, var(--MainLineColor), var(--MainLineColor) 1px, transparent 1px);
     background-size:
         var(--CharacterSize) 100%;
     background-position:
         left bottom;
+    transition: --MainLineColor 0.1s;
+}
+
+.menu {
+    --MenuWidth: 12rem;
+    grid-area: editor;
+    width: var(--CharacterSize);
+    height: 0;
+    background-color: var(--ForegroundColor);
+    transition: width 0.2s, height 0.2s;
+    overflow: hidden;
+    pointer-events: none;
+    border-radius: 0 var(--BorderRadius) var(--BorderRadius) var(--BorderRadius);
+    color: var(--BackgroundColor);
+    font-size: 80%;
+    &.opened {
+        width: var(--MenuWidth);
+        height: 100%;
+        pointer-events: auto;
+        background-size: 100% 100%;
+    }
+    &>* {
+        display: flex;
+        align-items: center;
+        justify-content: start;
+        width: var(--MenuWidth);
+        height: 2rem;
+        padding: 0 0.5rem;
+        text-decoration: none;
+        &:hover {
+            background-color: var(--Gray);
+        }
+        &:active {
+            background-color: unset;
+        }
+    }
+}
+
+@keyframes AppealClickabiliy {
+    0% {
+        transform: scale(1);
+    }
+    20% {
+        transform: scale(0.9);
+    }
+    50% {
+        transform: scale(1);
+    }
+    70% {
+        transform: scale(0.9);
+    }
+    100% {
+        transform: scale(1);
+    }
 }

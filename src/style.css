@@ -1,7 +1,8 @@
 :root {
     --BaseWidth: 92vw;
-    --BorderRadius: 0.1rem;
+    --BorderRadius: 2px;
     --ButtonGap: 0.2rem;
+    --Gray: rgba(127, 127, 127, 0.4);
 }
 
 main {

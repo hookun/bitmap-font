@@ -13,6 +13,6 @@ const appElement = document.createElement('div');
 targetElement.replaceWith(appElement);
 render(createElement(
     Provider,
-    {store: setup()},
+    {store: setup(document)},
     createElement(Application),
 ), appElement);

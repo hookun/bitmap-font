@@ -4,7 +4,7 @@
     width: var(--BaseWidth);
     grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
     grid-auto-rows: minmax(min-content, max-content);
-    column-gap: var(--EditorGap);
     row-gap: 1rem;
-    margin: 1rem auto;
+    column-gap: var(--EditorGap);
+    margin: 0 auto 1rem auto;
 }

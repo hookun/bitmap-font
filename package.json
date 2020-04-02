@@ -10,9 +10,9 @@
         "test:lint": "eslint --ext .ts src"
     },
     "devDependencies": {
-        "@hookun/builder": "^0.2.32",
-        "@types/react": "^16.9.30",
-        "@types/react-dom": "^16.9.5",
+        "@hookun/builder": "^0.2.33",
+        "@types/react": "^16.9.31",
+        "@types/react-dom": "^16.9.6",
         "@types/react-redux": "^7.1.7",
         "@types/react-window": "^1.8.1",
         "idb-keyval": "^3.2.0",
