@@ -6,7 +6,7 @@ import {useUCD} from '../../use/UCD';
 import {toHex} from '../../util/codePoint';
 import {classnames} from '../../util/classnames';
 import {useEditorMessage} from '../../use/EditorMessage';
-import {EnterEditor, LeaveEditor, ToggleEditorMenu, SetEditorMessage} from '../../core/Editor/action';
+import {EnterEditor, LeaveEditor, ToggleEditorMenu, SetEditorMessage, CloseEditorMenu} from '../../core/Editor/action';
 import {useAltKey} from '../../use/AltKey';
 import {useEditorState} from '../../use/EditorState';
 import {useEditorStateMenu} from '../../use/EditorStateMenu';
@@ -15,7 +15,10 @@ export const Character = ({codePoint}: {codePoint: number}): ReactElement => {
     const dispatch = useDispatch();
     const altKey = useAltKey();
     const onEnter = useCallback(
-        () => dispatch(EnterEditor({codePoint, element: 'toggle'})),
+        (event: MouseEvent) => {
+            event.stopPropagation();
+            dispatch(EnterEditor({codePoint, element: 'toggle'}));
+        },
         [dispatch, codePoint],
     );
     const onLeave = useCallback(
@@ -34,6 +37,7 @@ export const Character = ({codePoint}: {codePoint: number}): ReactElement => {
             onMouseEnter: onEnter,
             onMouseLeave: onLeave,
             onTouchStart: onEnter,
+            onMouseDown: onEnter,
             onClick: useCallback(
                 () => {
                     if (altKey) {
@@ -65,6 +69,7 @@ export const GlyphEditorMenu = ({codePoint}: {codePoint: number}): ReactElement 
     const dispatch = useDispatch();
     const opened = useEditorStateMenu(codePoint);
     const character = String.fromCodePoint(codePoint);
+    const onTouch = useCallback((event: MouseEvent) => event.stopPropagation(), []);
     return createElement(
         'div',
         {
@@ -72,6 +77,8 @@ export const GlyphEditorMenu = ({codePoint}: {codePoint: number}): ReactElement 
                 className.menu,
                 opened && className.opened,
             ),
+            onMouseDown: onTouch,
+            onTouchStart: onTouch,
         },
         createElement(
             'button',
@@ -126,7 +133,10 @@ export const GlyphEditor = ({codePoint}: {codePoint: number}): ReactElement => {
     const editorState = useEditorState(codePoint);
     const message = useEditorMessage(codePoint);
     const onEnter = useCallback(
-        () => dispatch(EnterEditor({codePoint, element: 'root'})),
+        () => {
+            dispatch(EnterEditor({codePoint, element: 'root'}));
+            dispatch(CloseEditorMenu(codePoint));
+        },
         [dispatch, codePoint],
     );
     const onLeave = useCallback(
@@ -142,6 +152,7 @@ export const GlyphEditor = ({codePoint}: {codePoint: number}): ReactElement => {
             ),
             onMouseEnter: onEnter,
             onMouseLeave: onLeave,
+            onMouseDown: onEnter,
             onTouchStart: onEnter,
         },
         message && createElement(

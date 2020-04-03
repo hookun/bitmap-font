@@ -37,14 +37,10 @@
     color: var(--ForegroundColor);
     font-size: 1.2rem;
     font-weight: bold;
-    transition: transform 0.1s, border-radius 0s;
-    transition-delay: 0s, 0.2s;
+    transition: border-radius 0s;
+    transition-delay: 0.2s;
     border-radius: var(--BorderRadius);
     box-shadow: 0 0 0 1px var(--ForegroundColor) inset;
-    overflow: hidden;
-    &:active {
-        transform: scale(0.9);
-    }
     &>svg {
         fill: none;
         stroke: var(--ForegroundColor);
@@ -58,7 +54,8 @@
         height: var(--CharacterSize);
         color: var(--BackgroundColor);
         background-color: var(--ForegroundColor);
-        transition: height 0.2s, left 0s, right 0s, background-color 0s;
+        border-radius: var(--BorderRadius);
+        transition: height 0.2s, background-color 0s;
         overflow: hidden;
         &::before {
             content: attr(data-character);
@@ -76,11 +73,12 @@
         border-radius: var(--BorderRadius) var(--BorderRadius) 0 0;
         transition-delay: 0s, 0s;
         &>div {
-            left: 1px;
-            right: 1px;
-            height: 1px;
+            height: 1.5px;
+            border: 1px solid var(--ForegroundColor);
+            border-width: 0 1px;
+            border-radius: 0;
             background-color: var(--BackgroundColor);
-            transition-delay: 0s, 0.2s, 0.2s, 0.2s;
+            transition-delay: 0s, 0.2s;
         }
     }
 }
