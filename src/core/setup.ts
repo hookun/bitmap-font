@@ -7,6 +7,7 @@ import {reducer as KeyboardReducer} from './KeyBoard/reducer';
 import {reducer as EditorReducer} from './Editor/reducer';
 import {list as listFontSaga} from './Font/saga';
 import {list as listGlyphSaga} from './Glyph/saga';
+import {list as listEditorSaga} from './Editor/saga';
 import {Restart} from './action';
 import {PressKey, ReleaseKey} from './KeyBoard/action';
 
@@ -24,6 +25,7 @@ export const setup = (document: Document): Store => {
         yield all([
             ...listFontSaga(),
             ...listGlyphSaga(),
+            ...listEditorSaga(),
         ]);
     }));
     store.dispatch(Restart());

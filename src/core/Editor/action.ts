@@ -8,3 +8,10 @@ export const EnterEditor = createAction('EnterEditor')<{
     element: string,
 }>();
 export const LeaveEditor = createAction('LeaveEditor')<number>();
+export const SetEditorMessage = createAction('SetEditorMessage')<{
+    codePoint: number,
+    text: string,
+    color?: string,
+    duration?: number,
+}>();
+export const ClearEditorMessage = createAction('ClearEditorMessage')<number>();

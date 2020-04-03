@@ -6,7 +6,7 @@ import {useUCD} from '../../use/UCD';
 import {toHex} from '../../util/codePoint';
 import {classnames} from '../../util/classnames';
 import {useEditorMessage} from '../../use/EditorMessage';
-import {EnterEditor, LeaveEditor, ToggleEditorMenu} from '../../core/Editor/action';
+import {EnterEditor, LeaveEditor, ToggleEditorMenu, SetEditorMessage} from '../../core/Editor/action';
 import {useAltKey} from '../../use/AltKey';
 import {useEditorState} from '../../use/EditorState';
 import {useEditorStateMenu} from '../../use/EditorStateMenu';
@@ -84,10 +84,16 @@ export const GlyphEditorMenu = ({codePoint}: {codePoint: number}): ReactElement 
                         selection.removeAllRanges();
                         selection.addRange(range);
                         document.execCommand('copy');
+                        dispatch(SetEditorMessage({
+                            codePoint,
+                            text: 'コピーしました！',
+                            color: 'var(--Succeed)',
+                            duration: 2000,
+                        }));
                         selection.removeAllRanges();
                         event.currentTarget.focus();
                     },
-                    [],
+                    [dispatch, codePoint],
                 ),
             },
             'クリップボードにコピー：',
@@ -140,8 +146,11 @@ export const GlyphEditor = ({codePoint}: {codePoint: number}): ReactElement => {
         },
         message && createElement(
             'div',
-            {className: className.message},
-            message,
+            {
+                className: className.message,
+                style: {color: message.color || null},
+            },
+            message.text,
         ),
         createElement(Character, {codePoint}),
         createElement(

@@ -3,6 +3,10 @@
     --BorderRadius: 2px;
     --ButtonGap: 0.2rem;
     --Gray: rgba(127, 127, 127, 0.4);
+    --Succeed: rgb(0, 104, 0);
+    &[data-theme=Dark] {
+        --Succeed: rgb(64, 255, 64);
+    }
 }
 
 main {
