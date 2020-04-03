@@ -16,11 +16,3 @@ main>:first-child {
 h1, h2 {
     width: var(--BaseWidth);
 }
-
-button {
-    cursor: pointer;
-}
-
-input {
-    min-width: 0;
-}
