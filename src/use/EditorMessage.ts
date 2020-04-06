@@ -16,7 +16,9 @@ export const useEditorMessage = (codePoint: number): EditorMessage | null => {
                 if (element == 'toggle') {
                     if (altKey) {
                         return {text: '閉じる'};
-                    } else if (!menu) {
+                    } else if (menu) {
+                        return {text: 'メニューを閉じる'};
+                    } else {
                         return {text: 'メニューを開く'};
                     }
                 }

@@ -31,6 +31,6 @@ export const InputBoolean = (
             createElement('rect', {x: 0, y: 0, width: 10, height: 10}),
             checked && createElement('path', {d: 'M2 4L4 8L8 2'}),
         ),
-        createElement('div', null, label),
+        label,
     );
 };

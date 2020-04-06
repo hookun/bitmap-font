@@ -79,6 +79,10 @@ export const GlyphEditorMenu = ({codePoint}: {codePoint: number}): ReactElement 
             ),
             onMouseDown: onTouch,
             onTouchStart: onTouch,
+            onMouseLeave: useCallback(
+                () => dispatch(CloseEditorMenu(codePoint)),
+                [dispatch, codePoint],
+            ),
         },
         createElement(
             'button',

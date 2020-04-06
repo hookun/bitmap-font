@@ -1,9 +1,9 @@
 :root {
     --BaseWidth: 92vw;
     --BorderRadius: 2px;
-    --ButtonGap: 0.2rem;
     --Gray: rgba(127, 127, 127, 0.4);
     --Succeed: rgb(0, 104, 0);
+    --Error: rgb(185, 81, 21);
     &[data-theme=Dark] {
         --Succeed: rgb(64, 255, 64);
     }
@@ -11,12 +11,15 @@
 
 main {
     padding: 2rem 0;
+    &>h1 {
+        padding: 0.5rem var(--BasePadding);
+    }
 }
 
 main>:first-child {
     margin-top: 0;
 }
 
-h1, h2 {
-    width: var(--BaseWidth);
+input {
+    border-radius: 0;
 }

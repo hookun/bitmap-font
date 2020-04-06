@@ -1,17 +1,17 @@
 import {select, call, put, all} from 'redux-saga/effects';
 import {ActionType} from 'typesafe-actions';
-import {SetFontName, SagaSetFont} from '../action';
+import {SetFontId, SagaSetFont} from '../action';
 import {selectDB} from '../../selector';
 import {FontState} from '../type';
 import {DB} from '../../type';
 import {loadFont} from '../util/loadFont';
-import {saveLastFontName} from '../util/saveLastFontName';
+import {saveLastFontId} from '../util/saveLastFontId';
 
-export const onSetFontName = function* ({payload: fontName}: ActionType<typeof SetFontName>) {
+export const onSetFontId = function* ({payload: id}: ActionType<typeof SetFontId>) {
     const db: DB = yield select(selectDB);
     const [font]: [FontState] = yield all([
-        call(loadFont, db, fontName),
-        call(saveLastFontName, db, fontName),
+        call(loadFont, db, id),
+        call(saveLastFontId, db, id),
     ]);
     yield put(SagaSetFont(font));
 };

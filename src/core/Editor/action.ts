@@ -15,3 +15,5 @@ export const SetEditorMessage = createAction('SetEditorMessage')<{
     duration?: number,
 }>();
 export const ClearEditorMessage = createAction('ClearEditorMessage')<number>();
+export const OpenFontSettings = createAction('OpenFontSettings')();
+export const CloseFontSettings = createAction('CloseFontSettings')();

@@ -1,7 +1,22 @@
-.editors {
+.app {
     --EditorGap: 0.2rem;
+    filter: none !important;
+}
+
+.container {
+    padding: 0.5rem var(--BasePadding);
+}
+
+.config {
+    --Filter: blur(3px);
+    &>* {
+        filter: var(--Filter);
+    }
+}
+
+.editors {
     display: grid;
-    width: var(--BaseWidth);
+    width: 100%;
     grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
     grid-auto-rows: minmax(min-content, max-content);
     row-gap: 1rem;

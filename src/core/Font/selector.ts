@@ -2,7 +2,8 @@ import {createSelector} from 'reselect';
 import {FontState} from './type';
 
 export const selectFont = ({Font}: {Font: FontState}): FontState => Font;
-export const selectFontName = createSelector([selectFont], ({fontName}) => fontName);
+export const selectFontId = createSelector([selectFont], ({id}) => id);
+export const selectFontName = createSelector([selectFont], ({name}) => name);
 export const selectFontAscent = createSelector([selectFont], ({ascent}) => ascent);
 export const selectFontDescent = createSelector([selectFont], ({descent}) => descent);
-export const selectFontEdting = createSelector([selectFont], ({editing}) => editing);
+export const selectFontEditng = createSelector([selectFont], ({editing}) => editing);

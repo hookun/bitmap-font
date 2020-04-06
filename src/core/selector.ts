@@ -16,8 +16,8 @@ export const selectDB = createSelector(
             version: 1,
             stores: {
                 [names.app]: null,
-                [names.font]: {keyPath: ['fontName']},
-                [names.gryph]: {keyPath: ['fontName', 'codePoint']},
+                [names.font]: {keyPath: ['id']},
+                [names.gryph]: {keyPath: ['id', 'codePoint']},
             },
         }),
     }),

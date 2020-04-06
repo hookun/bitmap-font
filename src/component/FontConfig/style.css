@@ -1,0 +1,86 @@
+.background {
+    z-index: 1;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    align-content: center;
+    align-items: center;
+    justify-items: center;
+    background-color: var(--Gray);
+    opacity: 0;
+    pointer-events: none;
+    filter: none !important;
+    transition: opacity 0.2s;
+    &.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+}
+
+.container {
+    --SmallFont: 0.75rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: 0.25rem;
+    width: var(--BaseWidth);
+    max-width: 360px;
+    max-height: 92vh;
+    padding: 1rem;
+    overflow-y: auto;
+    background-color: var(--BackgroundColor);
+    border-radius: var(--BorderRadius);
+    &>* {
+        width: 100%;
+    }
+    &>h1 {
+        margin: 0;
+        padding: 0.5rem 0;
+        font-size: 1rem;
+        line-height: 1;
+    }
+    &>label {
+        font-size: var(--SmallFont);
+    }
+    &>svg {
+        justify-self: center;
+        width: 92%;
+    }
+}
+
+.name, .asc, .desc {
+    height: 1.5rem;
+    line-height: 1.5rem;
+    background-image: linear-gradient(0deg, var(--ForegroundColor), var(--ForegroundColor));
+    background-size: 100% 1px;
+    background-position: center 1.5rem;
+    border-bottom: 1px solid var(--ForegroundColor);
+}
+
+.error {
+    font-size: var(--SmallFont);
+    color: var(--Error);
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(min-content, max-content));
+    column-gap: 0.5rem;
+    align-content: start;
+    justify-content: end;
+    &>button {
+        padding: 0.25rem 0.5rem;
+        line-height: 1.5;
+        border-radius: var(--BorderRadius);
+        box-shadow: 0 0 0 1px var(--ForegroundColor) inset;
+        &[type=submit] {
+            box-shadow: none;
+            color: var(--BackgroundColor);
+            background-color: var(--ForegroundColor);
+        }
+    }
+}

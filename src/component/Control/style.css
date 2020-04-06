@@ -1,20 +1,36 @@
 .container {
-    --Padding: calc(50% - var(--BaseWidth) / 2);
     z-index: 1;
     position: sticky;
     top: -1px;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(min-content, max-content)) 1fr;
-    grid-template-rows: repeat(1, minmax(min-content, max-content));
-    column-gap: calc(var(--ButtonGap) * 2);
-    align-items: center;
-    justify-items: center;
+    display: flex;
+    align-items: flex-end;
     width: 100%;
-    padding: calc(0.5rem + 1px) var(--Padding) 0.5rem var(--Padding);
-    margin: 0.5rem auto;
+    padding: calc(0.25rem + 1px) 0 0.15rem 0;
     background-color: var(--BackgroundColor);
+    overflow-x: auto;
     &.stuck {
         box-shadow: 0 0 2px var(--ForegroundColor);
         transition: box-shadow 0.1s;
+    }
+    &>* {
+        flex-shrink: 0;
+        margin: 0.25rem 0.5rem 0.25rem 0;
+    }
+    &>.spacer {
+        width: var(--BasePadding);
+        height: 1em;
+        margin: 0;
+    }
+}
+
+.labeled {
+    &[data-type=number] {
+        text-align: end;
+    }
+    &>.label {
+        font-size: 0.75rem;
+        line-height: 1;
+        margin-bottom: 0.2rem;
+        text-align: start;
     }
 }

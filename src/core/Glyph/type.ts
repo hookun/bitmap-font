@@ -1,5 +1,5 @@
 export interface GlyphKey {
-    fontName: string,
+    fontId: string,
     codePoint: number,
 }
 

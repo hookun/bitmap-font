@@ -1,11 +1,11 @@
 import {select, call, put} from 'redux-saga/effects';
 import {selectDB} from '../../selector';
-import {SetFontName} from '../action';
+import {SetFontId} from '../action';
 import {DB} from '../../type';
-import {loadLastFontName} from '../util/loadLastFontName';
+import {loadLastFontId} from '../util/loadLastFontId';
 
 export const onRestart = function* () {
     const db: DB = yield select(selectDB);
-    const fontName: string = yield call(loadLastFontName, db);
-    yield put(SetFontName(fontName));
+    const id: string = yield call(loadLastFontId, db);
+    yield put(SetFontId(id));
 };

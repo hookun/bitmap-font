@@ -3,9 +3,12 @@ import {createAction} from 'typesafe-actions';
 import {FontState} from './type';
 
 export const SagaSetFont = createAction('SagaSetFont')<FontState>();
-export const SetFontName = createAction('SetFontName')<string>();
-export const SetFontAscent = createAction('SetFontAscent')<number>();
-export const SetFontDescent = createAction('SetFontDescent')<number>();
+export const SetFontId = createAction('SetFontId')<string>();
+export const SetFontConfig = createAction('SetFontConfig')<{
+    name: string,
+    ascent: number,
+    descent: number,
+}>();
 export const OpenEditors = createAction('OpenEditors')<string>();
 export const OpenEditor = createAction('OpenEditor')<number>();
 export const CloseEditor = createAction('CloseEditor')<number>();

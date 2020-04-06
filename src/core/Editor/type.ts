@@ -3,9 +3,10 @@ export interface EditorMessage {
     text: string,
 }
 
-export type EditorState = null | {
-    codePoint: number,
+export type EditorState = {
+    config?: true,
+    codePoint?: number,
     element?: string,
-    menu?: boolean,
+    menu?: true,
     message?: EditorMessage,
 };

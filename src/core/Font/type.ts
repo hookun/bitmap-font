@@ -1,5 +1,6 @@
 export interface FontState {
-    fontName: string,
+    id: string,
+    name: string,
     ascent: number,
     descent: number,
     editing: Array<number>,

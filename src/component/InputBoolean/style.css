@@ -1,7 +1,8 @@
 .container {
-    --Size: 1rem;
+    --Size: 1em;
     display: flex;
     align-items: center;
+    white-space: nowrap;
     &:active {
         &>.check {
             transform: scale(0.8);
@@ -10,10 +11,10 @@
 }
 
 .check {
-    width: var(--Size);
+    flex: 0 0 var(--Size);
     height: var(--Size);
     fill: none;
     stroke: currentColor;
-    margin-right: var(--ButtonGap);
+    margin-right: 0.2rem;
     transition: transform 0.1s;
 }

@@ -24,7 +24,7 @@ import {OpenEditor, OpenEditors} from '../../core/Font/action';
 import {toHex} from '../../util/codePoint';
 import {isPrintable} from '../../util/isPrintable';
 import {classnames} from '../../util/classnames';
-import {selectFontEdting} from '../../core/Font/selector';
+import {selectFontEditng} from '../../core/Font/selector';
 
 export const GlyphSelectorCell = (
     {
@@ -50,7 +50,7 @@ export const GlyphSelectorCell = (
     const codePoint = rowIndex * columnCount + columnIndex;
     const printable = isPrintable(codePoint);
     const hex = toHex(codePoint);
-    const codePointList = useSelector(selectFontEdting);
+    const codePointList = useSelector(selectFontEditng);
     useEffect(() => {
         if (printable) {
             const {width, height, element: canvas} = getRectSize(ref);
