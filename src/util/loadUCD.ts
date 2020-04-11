@@ -1,4 +1,4 @@
-import UnicodeData from 'https://www.unicode.org/Public/UCD/latest/ucd/UnicodeData.txt';
+import UnicodeData from './UnicodeData.txt';
 import {readStream} from './readStream';
 import {readLine} from './readLine';
 

@@ -1,5 +1,5 @@
 import {useEffect, useState, RefObject, useMemo} from 'react';
-import {debounce} from '../util/debounce';
+import {debounce} from '@hookun/util/debounce';
 
 export interface RectSize<Element extends HTMLElement = HTMLElement> {
     element: Element,

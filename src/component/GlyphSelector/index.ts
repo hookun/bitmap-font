@@ -10,6 +10,7 @@ import {
     FormEvent,
 } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import {classnames} from '@hookun/util/classnames';
 import {
     FixedSizeGrid,
     FixedSizeGridProps,
@@ -23,7 +24,6 @@ import {MaxCodePoint} from '../../constants';
 import {OpenEditor, OpenEditors} from '../../core/Font/action';
 import {toHex} from '../../util/codePoint';
 import {isPrintable} from '../../util/isPrintable';
-import {classnames} from '../../util/classnames';
 import {selectFontEditng} from '../../core/Font/selector';
 
 export const GlyphSelectorCell = (

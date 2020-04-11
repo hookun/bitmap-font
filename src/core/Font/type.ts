@@ -4,4 +4,6 @@ export interface FontState {
     ascent: number,
     descent: number,
     editing: Array<number>,
+    width: number,
+    height: number,
 }

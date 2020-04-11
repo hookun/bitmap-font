@@ -3,14 +3,15 @@ import {useSelector} from 'react-redux';
 import {Control} from '../Control';
 import {GlyphSelector} from '../GlyphSelector';
 import {GlyphEditor} from '../GlyphEditor';
-import {selectFontEditng} from '../../core/Font/selector';
+import {selectFontEditng, selectFontEditorsStyle} from '../../core/Font/selector';
 import className from './style.css';
 import {FontConfig} from '../FontConfig';
-import {selectFontConfig} from '../../core/Editor/selector';
+import {selectFontConfig, selectEditor} from '../../core/Editor/selector';
 
 export const Application = (): ReactElement => {
     const codePointList = useSelector(selectFontEditng);
     const configMode = useSelector(selectFontConfig);
+    const style = useSelector(selectFontEditorsStyle);
     useEffect(
         () => {
             if (configMode) {
@@ -25,6 +26,7 @@ export const Application = (): ReactElement => {
         },
         [configMode],
     );
+    const editor = useSelector(selectEditor);
     return createElement(
         Fragment,
         null,
@@ -35,6 +37,7 @@ export const Application = (): ReactElement => {
             createElement(
                 'div',
                 {
+                    style,
                     className: className.editors,
                     children: codePointList.map((codePoint) => createElement(
                         GlyphEditor,
@@ -42,6 +45,7 @@ export const Application = (): ReactElement => {
                     )),
                 },
             ),
+            createElement('pre', null, JSON.stringify(editor, null, 2)),
             createElement(GlyphSelector),
         ),
         createElement(FontConfig),

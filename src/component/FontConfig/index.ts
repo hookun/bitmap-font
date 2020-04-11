@@ -1,12 +1,13 @@
-import {ReactElement, createElement, useCallback, ChangeEvent, useState, EventHandler, FormEvent} from 'react';
+import {ReactElement, createElement, useCallback, ChangeEvent, useState, EventHandler, FormEvent, Fragment, HTMLAttributes} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import {classnames} from '@hookun/util/classnames';
 import {CloseFontSettings} from '../../core/Editor/action';
 import {selectFontConfig} from '../../core/Editor/selector';
-import {classnames} from '../../util/classnames';
 import className from './style.css';
 import {selectFont} from '../../core/Font/selector';
 import {GlyphMetrics} from '../GlyphMetrics';
 import {SetFontConfig} from '../../core/Font/action';
+import {FontStateLimits} from '../../core/Font/util/patchFontState';
 
 export interface InputData<Type> {
     value: Type,
@@ -38,9 +39,11 @@ export const useFontNameInput = (defaultValue: string): InputData<string> => {
 
 export const useSizeInput = (
     defaultValue: number,
-    min: number,
-    max: number,
-    step: number,
+    {min, max, step = 1}: {
+        min: number,
+        max: number,
+        step?: number,
+    },
 ): NumberInputData => {
     const [{value, error}, setData] = useState({value: defaultValue, error: ''});
     const onChange = useCallback<EventHandler<ChangeEvent<HTMLInputElement>>>(
@@ -73,8 +76,10 @@ export const FontConfig = (): ReactElement => {
     const active = useSelector(selectFontConfig);
     const font = useSelector(selectFont);
     const name = useFontNameInput(font.name);
-    const ascent = useSizeInput(font.ascent, 4, 1000, 1);
-    const descent = useSizeInput(font.descent, 0, 1000, 1);
+    const ascent = useSizeInput(font.ascent, FontStateLimits.ascent);
+    const descent = useSizeInput(font.descent, FontStateLimits.descent);
+    const width = useSizeInput(font.width, FontStateLimits.width);
+    const height = useSizeInput(font.height, FontStateLimits.height);
     const close = useCallback(() => dispatch(CloseFontSettings()), [dispatch]);
     return createElement(
         'div',
@@ -96,7 +101,7 @@ export const FontConfig = (): ReactElement => {
                 onSubmit: useCallback(
                     (event: FormEvent) => {
                         event.preventDefault();
-                        const error = name.error || ascent.error || descent.error;
+                        const error = name.error || ascent.error || descent.error || width.error || height.error;
                         if (error) {
                             alert(error);
                         } else {
@@ -104,11 +109,13 @@ export const FontConfig = (): ReactElement => {
                                 name: name.value,
                                 ascent: ascent.value,
                                 descent: descent.value,
+                                width: width.value,
+                                height: height.value,
                             }));
                             dispatch(CloseFontSettings());
                         }
                     },
-                    [name, ascent, descent, dispatch],
+                    [name, ascent, descent, width, height, dispatch],
                 ),
             },
             createElement('h1', null, `フォントの設定 (ID: ${font.id})`),
@@ -143,6 +150,30 @@ export const FontConfig = (): ReactElement => {
                 className: className.desc,
                 defaultValue: font.descent,
                 onChange: descent.onChange,
+            }),
+            createElement('div', {className: className.error}, descent.error),
+            createElement('label', {htmlFor: className.width}, '編集画面の幅（画面より大きくはなりません）'),
+            createElement('input', {
+                id: className.width,
+                type: 'number',
+                min: width.min,
+                max: width.max,
+                step: width.step,
+                className: className.width,
+                defaultValue: font.width,
+                onChange: width.onChange,
+            }),
+            createElement('div', {className: className.error}, descent.error),
+            createElement('label', {htmlFor: className.height}, '編集画面の高さ'),
+            createElement('input', {
+                id: className.height,
+                type: 'number',
+                min: height.min,
+                max: height.max,
+                step: height.step,
+                className: className.height,
+                defaultValue: font.height,
+                onChange: height.onChange,
             }),
             createElement('div', {className: className.error}, descent.error),
             createElement(

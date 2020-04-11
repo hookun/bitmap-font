@@ -24,13 +24,13 @@
 }
 
 .labeled {
-    &[data-type=number] {
-        text-align: end;
-    }
+    display: grid;
+    grid-template-columns: max-content;
+    grid-template-rows: repeat(2, min-content);
+    row-gap: 0.2rem;
+    justify-items: center;
     &>.label {
         font-size: 0.75rem;
         line-height: 1;
-        margin-bottom: 0.2rem;
-        text-align: start;
     }
 }

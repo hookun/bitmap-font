@@ -1,5 +1,6 @@
-import {SetFontId} from '../Font/action';
 import {createReducer, ActionType} from 'typesafe-actions';
+import {SetFontId} from '../Font/action';
+import {patchEditorState as patch} from './util/patchEditorState';
 import {
     EnterEditor,
     LeaveEditor,
@@ -27,40 +28,14 @@ export type EditorStateCreator =
 
 export type EditorStateAction = ActionType<EditorStateCreator>;
 
-export const reducer = createReducer<EditorState, EditorStateAction>({})
-.handleAction(SetFontId, () => ({}))
-.handleAction(EnterEditor, (state, {payload: {codePoint, element}}) => {
-    if (state.codePoint === codePoint) {
-        return state.element === element ? state : {...state, element};
-    }
-    return {codePoint, element};
-})
-.handleAction(LeaveEditor, (state, {payload: codePoint}) => {
-    return state.codePoint === codePoint ? {} : state;
-})
-.handleAction(OpenEditorMenu, (state, {payload: codePoint}) => {
-    return state.codePoint === codePoint ? {...state, menu: true} : {};
-})
-.handleAction(CloseEditorMenu, (state, {payload: codePoint}) => {
-    return state.codePoint === codePoint ? {...state, menu: false} : {};
-})
-.handleAction(ToggleEditorMenu, (state, {payload: codePoint}) => {
-    return state.codePoint === codePoint ? {...state, menu: !state.menu} : {};
-})
-.handleAction(SetEditorMessage, (state, {payload: {codePoint, color, text}}) => {
-    return state.codePoint === codePoint ? {...state, message: {color, text}} : {};
-})
-.handleAction(ClearEditorMessage, (state, {payload: codePoint}) => {
-    if (state.codePoint === codePoint) {
-        const newState = {...state};
-        delete newState.message;
-        return newState;
-    }
-    return {};
-})
-.handleAction(OpenFontSettings, (state) => ({...state, config: true}))
-.handleAction(CloseFontSettings, (state) => {
-    const newState = {...state};
-    delete newState.config;
-    return newState;
-});
+export const reducer = createReducer<EditorState, EditorStateAction>(patch())
+.handleAction(SetFontId, () => patch())
+.handleAction(EnterEditor, (state, {payload}) => patch(state, payload))
+.handleAction(LeaveEditor, (state, {payload: codePoint}) => patch(state, {codePoint, element: null}))
+.handleAction(OpenEditorMenu, (state, {payload: codePoint}) => patch(state, {codePoint, menu: true}))
+.handleAction(CloseEditorMenu, (state, {payload: codePoint}) => patch(state, {codePoint, menu: false}))
+.handleAction(ToggleEditorMenu, (state, {payload: codePoint}) => patch(state, {codePoint, menu: !state.menu}))
+.handleAction(SetEditorMessage, (state, {payload: {codePoint, color, text}}) => patch(state, {codePoint, message: {color, text}}))
+.handleAction(ClearEditorMessage, (state, {payload: codePoint}) => patch(state, {codePoint, message: null}))
+.handleAction(OpenFontSettings, (state) => patch(state, {config: true}))
+.handleAction(CloseFontSettings, (state) => patch(state, {config: false}));

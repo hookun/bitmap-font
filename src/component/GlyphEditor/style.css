@@ -4,7 +4,7 @@
     display: grid;
     grid-template-columns: var(--CharacterSize) 1fr;
     column-gap: var(--EditorGap);
-    grid-template-rows: 1rem 1.4rem 1rem 12rem;
+    grid-template-rows: 1rem 1.4rem 1rem 1fr;
     grid-template-areas:
         'message   message'
         'character name'
@@ -34,6 +34,8 @@
     display: grid;
     align-items: center;
     justify-items: center;
+    width: 100%;
+    height: 100%;
     color: var(--ForegroundColor);
     font-size: 1.2rem;
     font-weight: bold;
@@ -100,53 +102,6 @@
     font-weight: 700;
     line-height: 1;
     text-shadow: 0 -0.1rem 0.2rem var(--BackgroundColor);
-}
-
-.editor {
-    grid-area: editor;
-    margin-top: var(--EditorGap);
-    background-image:
-        linear-gradient(270deg, var(--MainLineColor), var(--MainLineColor) 1px, transparent 1px);
-    background-size:
-        var(--CharacterSize) 100%;
-    background-position:
-        left bottom;
-    transition: --MainLineColor 0.1s;
-}
-
-.menu {
-    --MenuWidth: 12rem;
-    grid-area: editor;
-    width: var(--CharacterSize);
-    height: 0;
-    background-color: var(--ForegroundColor);
-    transition: width 0.2s, height 0.2s;
-    overflow: hidden;
-    pointer-events: none;
-    border-radius: 0 var(--BorderRadius) var(--BorderRadius) var(--BorderRadius);
-    color: var(--BackgroundColor);
-    font-size: 80%;
-    &.opened {
-        width: var(--MenuWidth);
-        height: 100%;
-        pointer-events: auto;
-        background-size: 100% 100%;
-    }
-    &>* {
-        display: flex;
-        align-items: center;
-        justify-content: start;
-        width: var(--MenuWidth);
-        height: 2rem;
-        padding: 0 0.5rem;
-        text-decoration: none;
-        &:hover {
-            background-color: var(--Gray);
-        }
-        &:active {
-            background-color: unset;
-        }
-    }
 }
 
 @keyframes AppealClickabiliy {

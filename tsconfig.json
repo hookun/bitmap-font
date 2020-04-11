@@ -10,6 +10,6 @@
     },
     "include": [
         "src/**/*.ts",
-        "node_modules/@hookun/builder/@types/*.d.ts"
+        "node_modules/@hookun/builder/types/*.d.ts"
     ]
 }

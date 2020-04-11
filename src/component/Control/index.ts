@@ -1,4 +1,10 @@
-import {createElement, ReactElement, useRef, useCallback} from 'react';
+import {
+    createElement,
+    ReactElement,
+    useRef,
+    useCallback,
+} from 'react';
+import {classnames} from '@hookun/util/classnames';
 import {
     SetGuideCellId,
     SetGuidePathDirection,
@@ -11,7 +17,6 @@ import {
 } from '../../core/Guide/selector';
 import {InputBoolean} from '../InputBoolean';
 import {useIntersection} from '../../use/Intersection';
-import {classnames} from '../../util/classnames';
 import {useSelector, useDispatch} from 'react-redux';
 import {selectFont} from '../../core/Font/selector';
 import {OpenFontSettings} from '../../core/Editor/action';
@@ -40,6 +45,8 @@ export const Control = (): ReactElement => {
             ['フォント名', font.name],
             ['上端', font.ascent],
             ['下端', font.descent],
+            ['幅', font.width],
+            ['高さ', font.height],
         ].map(([label, value]) => createElement(
             'button',
             {
