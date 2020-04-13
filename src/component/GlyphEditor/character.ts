@@ -1,8 +1,7 @@
 import {createElement, ReactElement, useCallback, Fragment, MouseEvent} from 'react';
 import {useDispatch} from 'react-redux';
 import {classnames} from '@hookun/util/classnames';
-import {CloseEditor} from '../../core/Font/action';
-import {EnterEditor, ToggleEditorMenu} from '../../core/Editor/action';
+import {EnterEditor, ToggleEditorMenu, CloseEditor} from '../../core/Editor/action';
 import {useAltKey} from '../../use/AltKey';
 import {useEditorMenuState} from '../../use/EditorStateMenu';
 import className from './style.css';

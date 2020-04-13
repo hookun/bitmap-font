@@ -14,3 +14,15 @@ export const selectFontConfig = createSelector(
     [selectEditor],
     (editor): boolean => Boolean(editor.config),
 );
+export const selectEditngCodePoints = createSelector([selectEditor], ({editing}) => editing);
+export const selectEditorWidth = createSelector([selectEditor], ({width}) => width);
+export const selectEditorHeight = createSelector([selectEditor], ({height}) => height);
+export const selectEditorStyle = createSelector(
+    [selectEditorWidth, selectEditorHeight],
+    (width, height) => ({
+        '--Width': `${width.toFixed(1)}rem`,
+        '--Height': `${height.toFixed(1)}rem`,
+    }),
+);
+export const selectEditorLoading = createSelector([selectEditor], ({loading}) => Boolean(loading));
+export const selectEditorSaving = createSelector([selectEditor], ({saving}) => Boolean(saving));

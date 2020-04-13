@@ -21,12 +21,14 @@ import {useSelector, useDispatch} from 'react-redux';
 import {selectFont} from '../../core/Font/selector';
 import {OpenFontSettings} from '../../core/Editor/action';
 import className from './style.css';
+import {selectEditor} from '../../core/Editor/selector';
 
 export const Control = (): ReactElement => {
     const ref = useRef();
     const intersection = useIntersection(ref, {threshold: 1});
     const dispatch = useDispatch();
     const font = useSelector(selectFont);
+    const editor = useSelector(selectEditor);
     const openConfig = useCallback(
         () => dispatch(OpenFontSettings()),
         [dispatch],
@@ -45,8 +47,8 @@ export const Control = (): ReactElement => {
             ['フォント名', font.name],
             ['上端', font.ascent],
             ['下端', font.descent],
-            ['幅', font.width],
-            ['高さ', font.height],
+            ['幅', editor.width],
+            ['高さ', editor.height],
         ].map(([label, value]) => createElement(
             'button',
             {

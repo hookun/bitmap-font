@@ -1,17 +1,22 @@
 import {createElement, Fragment, ReactElement, useEffect} from 'react';
 import {useSelector} from 'react-redux';
+import {classnames} from '@hookun/util/classnames';
 import {Control} from '../Control';
 import {GlyphSelector} from '../GlyphSelector';
 import {GlyphEditor} from '../GlyphEditor';
-import {selectFontEditng, selectFontEditorsStyle} from '../../core/Font/selector';
-import className from './style.css';
 import {FontConfig} from '../FontConfig';
-import {selectFontConfig, selectEditor} from '../../core/Editor/selector';
+import {
+    selectFontConfig,
+    selectEditngCodePoints,
+    selectEditorStyle,
+} from '../../core/Editor/selector';
+import className from './style.css';
+import {selectEditorLoading} from '../../core/Editor/selector';
 
 export const Application = (): ReactElement => {
-    const codePointList = useSelector(selectFontEditng);
+    const codePointList = useSelector(selectEditngCodePoints);
     const configMode = useSelector(selectFontConfig);
-    const style = useSelector(selectFontEditorsStyle);
+    const style = useSelector(selectEditorStyle);
     useEffect(
         () => {
             if (configMode) {
@@ -26,14 +31,22 @@ export const Application = (): ReactElement => {
         },
         [configMode],
     );
-    const editor = useSelector(selectEditor);
+    if (useSelector(selectEditorLoading)) {
+        return createElement(
+            'div',
+            {className: className.loading},
+            '読み込み中',
+        );
+    }
     return createElement(
         Fragment,
         null,
         createElement(Control),
         createElement(
             'div',
-            {className: className.container},
+            {
+                className: className.container,
+            },
             createElement(
                 'div',
                 {
@@ -45,7 +58,6 @@ export const Application = (): ReactElement => {
                     )),
                 },
             ),
-            createElement('pre', null, JSON.stringify(editor, null, 2)),
             createElement(GlyphSelector),
         ),
         createElement(FontConfig),

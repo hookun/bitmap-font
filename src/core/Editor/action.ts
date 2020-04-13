@@ -1,7 +1,12 @@
 import {createAction} from 'typesafe-actions';
 import {EditorState} from './type';
 
-export const PatchEditor = createAction('PatchEditor')<Partial<EditorState>>();
+export const SagaSetEditor = createAction('SagaSetEditor')<Partial<EditorState>>();
+export const SetEditorLoading = createAction('SetEditorLoading')<boolean>();
+export const SetEditorSaving = createAction('SetEditorSaving')<boolean>();
+export const OpenEditors = createAction('OpenEditors')<string>();
+export const OpenEditor = createAction('OpenEditor')<number>();
+export const CloseEditor = createAction('CloseEditor')<number>();
 export const OpenEditorMenu = createAction('OpenEditorMenu')<number>();
 export const CloseEditorMenu = createAction('CloseEditorMenu')<number>();
 export const ToggleEditorMenu = createAction('ToggleEditorMenu')<number>();
@@ -38,3 +43,7 @@ export const ReleaseEditor = createAction('ReleaseEditor')<void | {
     scale: number,
 }>();
 export const ResetEditor = createAction('ResetEditor')();
+export const SetEditorConfig = createAction('SetEditorConfig')<{
+    width: number,
+    height: number,
+}>();

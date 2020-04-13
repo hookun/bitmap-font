@@ -7,8 +7,6 @@ import {Restart} from '../../action';
 import {
     SagaSetFont,
     SetFontId,
-    OpenEditor,
-    CloseEditor,
     SetFontConfig,
 } from '../action';
 
@@ -20,8 +18,6 @@ export const list = () => [
         [
             SagaSetFont,
             SetFontConfig,
-            OpenEditor,
-            CloseEditor,
         ].map(getType),
         onUpdateFont,
     ),

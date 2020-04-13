@@ -21,10 +21,10 @@ import {getRectSize, useRectSize} from '../../use/RectSize';
 import {useColor} from '../../use/Color';
 import {useScrollBarSize} from '../../use/ScrollBarSize';
 import {MaxCodePoint} from '../../constants';
-import {OpenEditor, OpenEditors} from '../../core/Font/action';
 import {toHex} from '../../util/codePoint';
 import {isPrintable} from '../../util/isPrintable';
-import {selectFontEditng} from '../../core/Font/selector';
+import {selectEditngCodePoints} from '../../core/Editor/selector';
+import {OpenEditor, OpenEditors} from '../../core/Editor/action';
 
 export const GlyphSelectorCell = (
     {
@@ -50,7 +50,7 @@ export const GlyphSelectorCell = (
     const codePoint = rowIndex * columnCount + columnIndex;
     const printable = isPrintable(codePoint);
     const hex = toHex(codePoint);
-    const codePointList = useSelector(selectFontEditng);
+    const codePointList = useSelector(selectEditngCodePoints);
     useEffect(() => {
         if (printable) {
             const {width, height, element: canvas} = getRectSize(ref);

@@ -1,16 +1,15 @@
 import {waitTransactionCompletion} from '../../../util/DBStore';
-import {FontState} from '../type';
+import {EditorState} from '../type';
 import {DB} from '../../type';
+import {mask} from './mask';
 
-export const saveFont = async (
+export const saveEditor = async (
     {names, store}: DB,
-    font: FontState,
+    editor: EditorState,
 ): Promise<void> => {
     const database = await store.open();
-    const storeName = names.font;
+    const storeName = names.editor;
     const tr = database.transaction(storeName, 'readwrite');
-    const masked = {...font};
-    delete masked.loading;
-    tr.objectStore(storeName).put(masked);
+    tr.objectStore(storeName).put(mask(editor));
     await waitTransactionCompletion(tr);
 };

@@ -4,6 +4,7 @@ export interface EditorMessage {
 }
 
 export type EditorState = {
+    id: string,
     codePoint: number | null,
     menu: number | null,
     size: number,
@@ -14,4 +15,9 @@ export type EditorState = {
     element: string | null,
     message: EditorMessage | null,
     config: boolean,
+    editing: Array<number>,
+    width: number,
+    height: number,
+    loading?: boolean,
+    saving?: boolean,
 };

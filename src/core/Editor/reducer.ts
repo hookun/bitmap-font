@@ -3,6 +3,9 @@ import {SetFontId} from '../Font/action';
 import {patchEditorState as patch} from './util/patchEditorState';
 import {
     EnterEditor,
+    OpenEditors,
+    OpenEditor,
+    CloseEditor,
     LeaveEditor,
     OpenEditorMenu,
     CloseEditorMenu,
@@ -16,14 +19,20 @@ import {
     ReleaseEditor,
     ResetEditor,
     SetEditorPointer,
-    PatchEditor,
+    SagaSetEditor,
+    SetEditorLoading,
+    SetEditorSaving,
 } from './action';
 import {EditorState} from './type';
 import {projectPosition} from '../util/projectPosition';
-import {PointerDown} from '../action';
+import {PointerDown, Restart} from '../action';
 
 export type EditorStateCreator =
-| typeof PatchEditor
+| typeof Restart
+| typeof SagaSetEditor
+| typeof OpenEditors
+| typeof OpenEditor
+| typeof CloseEditor
 | typeof SetFontId
 | typeof EnterEditor
 | typeof LeaveEditor
@@ -39,13 +48,36 @@ export type EditorStateCreator =
 | typeof ReleaseEditor
 | typeof ResetEditor
 | typeof SetEditorPointer
-| typeof PointerDown;
+| typeof PointerDown
+| typeof SetEditorLoading
+| typeof SetEditorSaving;
 
 export type EditorStateAction = ActionType<EditorStateCreator>;
 
 export const reducer = createReducer<EditorState, EditorStateAction>(patch())
-.handleAction(SetFontId, () => patch())
-.handleAction([PatchEditor, EnterEditor], (state, {payload}) => patch(state, payload))
+.handleAction([Restart, SetFontId], (state) => ({...state, loading: true}))
+.handleAction(OpenEditors, (state, {payload: characters}) => {
+    const editing = state.editing.slice();
+    for (const character of characters) {
+        editing.push(character.codePointAt(0));
+    }
+    return patch(state, {editing});
+})
+.handleAction(OpenEditor, (state, {payload: codePoint}) => {
+    return patch(state, {editing: state.editing.concat(codePoint)});
+})
+.handleAction(CloseEditor, (state, {payload: codePoint}) => {
+    const {editing} = state;
+    const index = editing.indexOf(codePoint);
+    if (index < 0) {
+        return state;
+    }
+    return patch(
+        state,
+        {editing: [...editing.slice(0, index), ...editing.slice(index + 1)]},
+    );
+})
+.handleAction([SagaSetEditor, EnterEditor], (state, {payload}) => patch(state, payload))
 .handleAction(OpenEditorMenu, (state, {payload: codePoint}) => patch(state, {menu: codePoint}))
 .handleAction(CloseEditorMenu, (state, {payload: codePoint}) => state.menu === codePoint ? patch(state, {menu: null}) : state)
 .handleAction(ToggleEditorMenu, (state, {payload: codePoint}) => patch(state, {menu: state.menu === codePoint ? null : codePoint}))
@@ -61,4 +93,6 @@ export const reducer = createReducer<EditorState, EditorStateAction>(patch())
     projectPosition({...state, ...payload}),
     {drag: null, scale: 1},
 ))
-.handleAction(PointerDown, (state) => patch(state, {menu: null}));
+.handleAction(PointerDown, (state) => patch(state, {menu: null}))
+.handleAction(SetEditorLoading, (state, {payload: loading}) => patch(state, {loading}))
+.handleAction(SetEditorSaving, (state, {payload: saving}) => patch(state, {saving}));

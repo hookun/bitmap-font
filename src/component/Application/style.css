@@ -1,9 +1,19 @@
+@keyframes FadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
 .app {
     filter: none !important;
 }
 
 .container {
     padding: 0.5rem var(--BasePadding);
+    animation: 0.2s FadeIn;
 }
 
 .config {
