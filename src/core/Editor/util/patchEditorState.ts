@@ -1,8 +1,6 @@
 import {EditorState} from '../type';
 import {nullCheck} from '../../util/nullCheck';
 import {isSameObject} from '../../util/isSameObject';
-import {generateNewId} from '../../util/generateFontId';
-import {clamp} from '../../../util/clamp';
 import {isSameArray} from '../../util/isSameArray';
 
 export const EditorStateLimits = {
@@ -15,7 +13,7 @@ export const EditorStateLimits = {
 export const patchEditorState = (...patches: Array<Partial<EditorState>>): EditorState => {
     const partial = Object.assign({}, ...patches) as Partial<EditorState>;
     const [first] = patches;
-    const size = nullCheck(partial.codePoint, 12);
+    const size = nullCheck(partial.size, 12);
     let origin = nullCheck(partial.origin, [size * 2, size * 2]);
     if (first && isSameArray(first.origin, origin)) {
         origin = first.origin;
@@ -24,11 +22,12 @@ export const patchEditorState = (...patches: Array<Partial<EditorState>>): Edito
         codePoint: partial.codePoint || null,
         size,
         origin: nullCheck(partial.origin, [size * 2, size * 2]),
-        pos: nullCheck(partial.pos, null),
-        grabbing: partial.grabbing || null,
+        pointer: nullCheck(partial.pointer, null),
+        drag: partial.drag || null,
+        scale: 1,
         element: partial.element || null,
         message: partial.message || null,
-        menu: Boolean(partial.menu),
+        menu: partial.menu || null,
         config: Boolean(partial.config),
     };
     return isSameObject(first, patched) ? first as EditorState : patched;

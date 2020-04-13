@@ -23,3 +23,7 @@ main>:first-child {
 input {
     border-radius: 0;
 }
+
+.stopPropagation {
+    --Propagation: stop;
+}

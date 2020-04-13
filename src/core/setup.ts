@@ -8,8 +8,11 @@ import {reducer as EditorReducer} from './Editor/reducer';
 import {list as listFontSaga} from './Font/saga';
 import {list as listGlyphSaga} from './Glyph/saga';
 import {list as listEditorSaga} from './Editor/saga';
-import {Restart} from './action';
+import {list as listDebugSaga} from './Debug/saga';
+import {Restart, PointerDown} from './action';
 import {PressKey, ReleaseKey} from './KeyBoard/action';
+import rootClassName from '../style.css';
+import {forEachAncestors} from '../util/forEachAncestors';
 
 export const reducer = combineReducers({
     Font: FontReducer,
@@ -26,6 +29,7 @@ export const setup = (document: Document): Store => {
             ...listFontSaga(),
             ...listGlyphSaga(),
             ...listEditorSaga(),
+            ...listDebugSaga(),
         ]);
     }));
     store.dispatch(Restart());
@@ -34,6 +38,25 @@ export const setup = (document: Document): Store => {
     });
     document.addEventListener('keyup', (event) => {
         store.dispatch(ReleaseKey(event));
+    });
+    const isStopped = (element: Element): boolean => {
+        let stopped = false;
+        forEachAncestors(element as Element, (element) => {
+            stopped = element.classList.contains(rootClassName.stopPropagation);
+            return stopped;
+        });
+        return stopped;
+    };
+    document.addEventListener('mousedown', (event) => {
+        if (!isStopped(event.target as Element)) {
+            store.dispatch(PointerDown(event));
+        }
+    });
+    document.addEventListener('touchstart', (event) => {
+        const {touches: [touch1, touch2]} = event;
+        if (!touch2 && isStopped(touch1.target as Element)) {
+            store.dispatch(PointerDown(event));
+        }
     });
     return store;
 };

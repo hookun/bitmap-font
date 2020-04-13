@@ -1,6 +1,7 @@
-import {useEditorState} from './EditorState';
+import {useSelector} from 'react-redux';
+import {selectEditor} from '../core/Editor/selector';
 
-export const useEditorStateMenu = (codePoint: number): boolean => {
-    const editorState = useEditorState(codePoint);
-    return Boolean(editorState && editorState.menu);
+export const useEditorMenuState = (codePoint: number): boolean => {
+    const {menu} = useSelector(selectEditor);
+    return menu === codePoint;
 };

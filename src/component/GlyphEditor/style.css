@@ -3,22 +3,13 @@
     --MainLineColor: var(--ForegroundColor);
     display: grid;
     grid-template-columns: var(--CharacterSize) 1fr;
-    column-gap: var(--EditorGap);
+    column-gap: 0.2rem;
     grid-template-rows: 1rem 1.4rem 1rem 1fr;
     grid-template-areas:
         'message   message'
         'character name'
         'character hex'
         'editor    editor';
-    &.focused {
-        --MainLineColor: rgb(197, 32, 32);
-        &>.character:not(.opened) {
-            animation: 0.3s 1s AppealClickabiliy;
-            &:hover {
-                animation: none;
-            }
-        }
-    }
 }
 
 .message {
@@ -102,22 +93,4 @@
     font-weight: 700;
     line-height: 1;
     text-shadow: 0 -0.1rem 0.2rem var(--BackgroundColor);
-}
-
-@keyframes AppealClickabiliy {
-    0% {
-        transform: scale(1);
-    }
-    20% {
-        transform: scale(0.9);
-    }
-    50% {
-        transform: scale(1);
-    }
-    70% {
-        transform: scale(0.9);
-    }
-    100% {
-        transform: scale(1);
-    }
 }

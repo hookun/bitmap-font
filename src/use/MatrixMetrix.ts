@@ -9,10 +9,9 @@ export interface MatrixMetrics {
     rowCount: number,
 }
 
-export const useMatrixMetrics = (codePoint: number): MatrixMetrics => {
+export const useMatrixMetrics = (): MatrixMetrics => {
     const ascent = useSelector(selectFontAscent);
     const descent = useSelector(selectFontDescent);
-    codePoint.toFixed(0);
     return useMemo(
         () => ({
             ascent,

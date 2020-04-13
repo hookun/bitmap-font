@@ -1,12 +1,10 @@
 import {createElement, ReactElement, useCallback} from 'react';
 import {useDispatch} from 'react-redux';
-import {classnames} from '@hookun/util/classnames';
 import className from './style.css';
 import {useUCD} from '../../use/UCD';
 import {toHex} from '../../util/codePoint';
 import {useEditorMessage} from '../../use/EditorMessage';
-import {EnterEditor, LeaveEditor, CloseEditorMenu} from '../../core/Editor/action';
-import {useEditorState} from '../../use/EditorState';
+import {EnterEditor, LeaveEditor} from '../../core/Editor/action';
 import {GlyphEditorMenu} from '../GlyphEditorMenu';
 import {Character} from './character';
 import {GlyphEditorCanvas} from '../GlyphEditorCanvas';
@@ -14,13 +12,9 @@ import {GlyphEditorCanvas} from '../GlyphEditorCanvas';
 export const GlyphEditor = ({codePoint}: {codePoint: number}): ReactElement => {
     const dispatch = useDispatch();
     const characterData = useUCD(codePoint);
-    const editorState = useEditorState(codePoint);
     const message = useEditorMessage(codePoint);
     const onEnter = useCallback(
-        () => {
-            dispatch(EnterEditor({codePoint, element: 'root'}));
-            dispatch(CloseEditorMenu(codePoint));
-        },
+        () => dispatch(EnterEditor({codePoint, element: 'root'})),
         [dispatch, codePoint],
     );
     const onLeave = useCallback(
@@ -30,13 +24,9 @@ export const GlyphEditor = ({codePoint}: {codePoint: number}): ReactElement => {
     return createElement(
         'div',
         {
-            className: classnames(
-                className.container,
-                editorState && className.focused,
-            ),
+            className: className.container,
             onMouseEnter: onEnter,
             onMouseLeave: onLeave,
-            onMouseDown: onEnter,
             onTouchStart: onEnter,
         },
         message && createElement(

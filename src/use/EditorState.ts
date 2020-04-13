@@ -6,7 +6,7 @@ import {EditorState} from '../core/Editor/type';
 export const useEditorState = (codePoint: number): EditorState => {
     const editor = useSelector(selectEditor);
     return useMemo(
-        () => editor && editor.codePoint === codePoint && editor,
+        () => editor.codePoint === codePoint && editor,
         [editor, codePoint],
     );
 };

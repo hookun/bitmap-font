@@ -2,10 +2,11 @@ import {createElement, ReactElement, useCallback, Fragment, MouseEvent} from 're
 import {useDispatch} from 'react-redux';
 import {classnames} from '@hookun/util/classnames';
 import {CloseEditor} from '../../core/Font/action';
-import className from './style.css';
 import {EnterEditor, ToggleEditorMenu} from '../../core/Editor/action';
 import {useAltKey} from '../../use/AltKey';
-import {useEditorStateMenu} from '../../use/EditorStateMenu';
+import {useEditorMenuState} from '../../use/EditorStateMenu';
+import className from './style.css';
+import rootClassName from '../../style.css';
 
 export const Character = ({codePoint}: {codePoint: number}): ReactElement => {
     const dispatch = useDispatch();
@@ -21,7 +22,7 @@ export const Character = ({codePoint}: {codePoint: number}): ReactElement => {
         () => dispatch(EnterEditor({codePoint, element: 'root'})),
         [dispatch, codePoint],
     );
-    const opened = useEditorStateMenu(codePoint);
+    const opened = useEditorMenuState(codePoint);
     const character = String.fromCodePoint(codePoint);
     return createElement(
         'button',
@@ -29,11 +30,11 @@ export const Character = ({codePoint}: {codePoint: number}): ReactElement => {
             className: classnames(
                 className.character,
                 opened ? className.opened : (altKey && className.alt),
+                rootClassName.stopPropagation,
             ),
             onMouseEnter: onEnter,
             onMouseLeave: onLeave,
             onTouchStart: onEnter,
-            onMouseDown: onEnter,
             onClick: useCallback(
                 () => {
                     if (altKey) {

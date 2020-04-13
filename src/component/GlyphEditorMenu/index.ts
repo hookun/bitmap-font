@@ -2,27 +2,22 @@ import {createElement, ReactElement, useCallback, MouseEvent} from 'react';
 import {useDispatch} from 'react-redux';
 import {classnames} from '@hookun/util/classnames';
 import {CloseEditor} from '../../core/Font/action';
-import {SetEditorMessage, CloseEditorMenu} from '../../core/Editor/action';
-import {useEditorStateMenu} from '../../use/EditorStateMenu';
+import {SetEditorMessage} from '../../core/Editor/action';
+import {useEditorMenuState} from '../../use/EditorStateMenu';
 import className from './style.css';
+import rootClassName from '../../style.css';
 
 export const GlyphEditorMenu = ({codePoint}: {codePoint: number}): ReactElement => {
     const dispatch = useDispatch();
-    const opened = useEditorStateMenu(codePoint);
+    const opened = useEditorMenuState(codePoint);
     const character = String.fromCodePoint(codePoint);
-    const onTouch = useCallback((event: MouseEvent) => event.stopPropagation(), []);
     return createElement(
         'div',
         {
             className: classnames(
                 className.menu,
                 opened && className.opened,
-            ),
-            onMouseDown: onTouch,
-            onTouchStart: onTouch,
-            onMouseLeave: useCallback(
-                () => dispatch(CloseEditorMenu(codePoint)),
-                [dispatch, codePoint],
+                rootClassName.stopPropagation,
             ),
         },
         createElement(
