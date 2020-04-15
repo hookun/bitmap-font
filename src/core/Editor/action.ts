@@ -47,3 +47,4 @@ export const SetEditorConfig = createAction('SetEditorConfig')<{
     width: number,
     height: number,
 }>();
+export const SetEditorGrid = createAction('SetEditorGrid')<boolean>();

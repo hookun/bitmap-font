@@ -37,6 +37,7 @@ export const useCanvas = (
                 canvas.width = width * dpr;
                 canvas.height = height * dpr;
                 const ctx = canvas.getContext('2d');
+                ctx.lineCap = ctx.lineJoin = 'round';
                 const render = (): void => {
                     ctx.save();
                     ctx.scale(dpr, dpr);

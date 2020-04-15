@@ -1,5 +1,6 @@
 import {MutableRefObject, useEffect} from 'react';
 import {noop} from '@hookun/util/noop';
+export const glabKey = `glab${Date.now().toString(34)}`;
 
 export interface Position {
     x: number,
@@ -56,8 +57,22 @@ export const getGrabbing = (
     };
 };
 
+export const setGrab = (id: string): void => {
+    document.documentElement.dataset[glabKey] = id;
+};
+
+export const resetGrab = (): void => {
+    delete document.documentElement.dataset[glabKey];
+};
+
+export const isGrabbing = (id?: string): boolean => {
+    const {documentElement: {dataset}} = document;
+    return id ? id === dataset[glabKey] : glabKey in dataset;
+};
+
 export const useGrab = (
     {
+        id,
         ref,
         onHover = noop,
         onEnter = noop,
@@ -65,9 +80,12 @@ export const useGrab = (
         onGrab = noop,
         onDrag = noop,
         onScale = noop,
+        onClick = noop,
         onRelease = noop,
         scaleSensitivity = 0.0001,
+        clickThreshold = 30,
     }: {
+        id: string,
         ref: MutableRefObject<HTMLElement>,
         onHover?: (data: GrabData) => void,
         onEnter?: () => void,
@@ -75,8 +93,10 @@ export const useGrab = (
         onGrab?: (data: GrabData) => void,
         onDrag?: (data: DragData) => void,
         onScale?: (data: ScaleData) => void,
+        onClick?: (data: GrabData) => void,
         onRelease?: () => void,
         scaleSensitivity?: number,
+        clickThreshold?: number,
     },
 ): void => {
     const {current: element} = ref;
@@ -85,25 +105,33 @@ export const useGrab = (
             return noop;
         }
         let hover = false;
+        let clickFlag = false;
         let grabbing: GrabData | null = null;
         const move = (pos: Position): void => {
             if (grabbing) {
-                onDrag({
-                    ...grabbing,
-                    dx: pos.x - grabbing.clientX,
-                    dy: grabbing.clientY - pos.y,
-                });
+                const dx = pos.x - grabbing.clientX;
+                const dy = grabbing.clientY - pos.y;
+                onDrag({...grabbing, dx, dy});
+                if (clickFlag && clickThreshold < Math.hypot(dx, dy)) {
+                    clickFlag = false;
+                }
             } else {
                 onHover(getGrabbing(pos, element));
             }
         };
         const grab = (pos: Position): void => {
             grabbing = getGrabbing(pos, element);
+            clickFlag = true;
+            setGrab(id);
             onGrab(grabbing);
+            element.removeEventListener('mousemove', onMouseMove);
             addEventListener('mousemove', onMouseMove);
         };
         const release = (): void => {
             if (grabbing) {
+                if (clickFlag) {
+                    onClick(grabbing);
+                }
                 grabbing = null;
                 onRelease();
                 if (!hover) {
@@ -111,13 +139,19 @@ export const useGrab = (
                 }
             }
             removeEventListener('mousemove', onMouseMove);
+            element.addEventListener('mousemove', onMouseMove, {passive: true});
+            resetGrab();
         };
         const onMouseDown = (event: MouseEvent): void => {
             event.preventDefault();
             grab(getPosition(event));
         };
         const onMouseMove = (event: MouseEvent): void => {
-            event.preventDefault();
+            if (isGrabbing()) {
+                if (!isGrabbing(id)) {
+                    return;
+                }
+            }
             event.stopPropagation();
             move(getPosition(event));
         };
@@ -183,9 +217,9 @@ export const useGrab = (
         element.addEventListener('mouseenter', onMouseEnter);
         element.addEventListener('mouseleave', onMouseLeave);
         element.addEventListener('mousedown', onMouseDown);
-        element.addEventListener('mousemove', onMouseMove);
+        element.addEventListener('mousemove', onMouseMove, {passive: true});
         element.addEventListener('touchstart', onTouchStart);
-        element.addEventListener('touchmove', onTouchMove);
+        element.addEventListener('touchmove', onTouchMove, {passive: false});
         element.addEventListener('wheel', onWheel);
         addEventListener('mouseup', release);
         addEventListener('touchend', onTouchEnd);
@@ -201,5 +235,18 @@ export const useGrab = (
             removeEventListener('mouseup', release);
             removeEventListener('touchend', onTouchEnd);
         };
-    }, [element, onGrab, onRelease, onDrag, onScale, onHover, onLeave, scaleSensitivity]);
+    }, [
+        id,
+        element,
+        onGrab,
+        onRelease,
+        onDrag,
+        onScale,
+        onHover,
+        onEnter,
+        onLeave,
+        onClick,
+        scaleSensitivity,
+        clickThreshold,
+    ]);
 };

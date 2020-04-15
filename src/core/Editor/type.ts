@@ -20,4 +20,5 @@ export type EditorState = {
     height: number,
     loading?: boolean,
     saving?: boolean,
+    grid: boolean,
 };

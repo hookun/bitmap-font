@@ -24,5 +24,7 @@ export const selectEditorStyle = createSelector(
         '--Height': `${height.toFixed(1)}rem`,
     }),
 );
+export const selectEditorDrag = createSelector([selectEditor], ({drag}) => drag);
 export const selectEditorLoading = createSelector([selectEditor], ({loading}) => Boolean(loading));
 export const selectEditorSaving = createSelector([selectEditor], ({saving}) => Boolean(saving));
+export const selectEditorGrid = createSelector([selectEditor], ({grid}) => grid);

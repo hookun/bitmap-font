@@ -1,7 +1,7 @@
 export const isSameArray = <Item>(
     a?: Array<Item>,
     b?: Array<Item>,
-): boolean => Boolean(
+): a is Array<Item> => Boolean(
     a
     && b
     && a.length === b.length

@@ -1,7 +1,6 @@
 import {combineReducers, applyMiddleware, createStore, Store} from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import {all} from 'redux-saga/effects';
-import {reducer as GuideReducer} from './Guide/reducer';
 import {reducer as FontReducer} from './Font/reducer';
 import {reducer as KeyboardReducer} from './KeyBoard/reducer';
 import {reducer as EditorReducer} from './Editor/reducer';
@@ -16,7 +15,6 @@ import {forEachAncestors} from '../util/forEachAncestors';
 
 export const reducer = combineReducers({
     Font: FontReducer,
-    Guide: GuideReducer,
     Keyboard: KeyboardReducer,
     Editor: EditorReducer,
 });

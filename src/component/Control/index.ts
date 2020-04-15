@@ -5,23 +5,13 @@ import {
     useCallback,
 } from 'react';
 import {classnames} from '@hookun/util/classnames';
-import {
-    SetGuideCellId,
-    SetGuidePathDirection,
-    SetGuideGrid,
-} from '../../core/Guide/action';
-import {
-    selectGuideCellId,
-    selectGuidePathDirection,
-    selectGuideGrid,
-} from '../../core/Guide/selector';
 import {InputBoolean} from '../InputBoolean';
 import {useIntersection} from '../../use/Intersection';
 import {useSelector, useDispatch} from 'react-redux';
 import {selectFont} from '../../core/Font/selector';
-import {OpenFontSettings} from '../../core/Editor/action';
+import {OpenFontSettings, SetEditorGrid} from '../../core/Editor/action';
+import {selectEditor, selectEditorGrid} from '../../core/Editor/selector';
 import className from './style.css';
-import {selectEditor} from '../../core/Editor/selector';
 
 export const Control = (): ReactElement => {
     const ref = useRef();
@@ -61,18 +51,8 @@ export const Control = (): ReactElement => {
         )),
         createElement(InputBoolean, {
             label: '罫線',
-            selector: selectGuideGrid,
-            action: SetGuideGrid,
-        }),
-        createElement(InputBoolean, {
-            label: 'マスの番号',
-            selector: selectGuideCellId,
-            action: SetGuideCellId,
-        }),
-        createElement(InputBoolean, {
-            label: 'パスの方向',
-            selector: selectGuidePathDirection,
-            action: SetGuidePathDirection,
+            selector: selectEditorGrid,
+            action: SetEditorGrid,
         }),
         createElement('div', {className: className.spacer}),
     );

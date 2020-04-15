@@ -9,3 +9,5 @@ export const SetFontConfig = createAction('SetFontConfig')<{
     ascent: number,
     descent: number,
 }>();
+export const DeleteGlyph = createAction('DeleteGlyph')<number>();
+export const TogglePixel = createAction('TogglePixel')<[number, number]>();

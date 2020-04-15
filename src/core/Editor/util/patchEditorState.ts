@@ -19,7 +19,9 @@ export const patchEditorState = (...patches: Array<Partial<EditorState>>): Edito
     if (editing.length === 0) {
         editing.push(65, 66, 67, 12354, 12356, 12358);
     }
-    let origin = nullCheck(partial.origin, [size * 2, size * 2]);
+    let origin: [number, number] = nullCheck(partial.origin, [size * 2, size * 2]);
+    let pointer: [number, number] | null = partial.pointer;
+    let drag: [number, number] | null = partial.drag;
     if (first) {
         if (isSameArray(first.origin, origin)) {
             origin = first.origin;
@@ -27,15 +29,21 @@ export const patchEditorState = (...patches: Array<Partial<EditorState>>): Edito
         if (isSameArray(first.editing, editing)) {
             editing = first.editing;
         }
+        if (pointer && isSameArray(first.pointer, pointer)) {
+            pointer = first.pointer;
+        }
+        if (drag && isSameArray(first.drag, drag)) {
+            drag = first.drag;
+        }
     }
     const {width, height} = EditorStateLimits;
     const patched: EditorState = {
         id: nullCheck(partial.id, generateNewId()),
         codePoint: partial.codePoint || null,
         size,
-        origin: nullCheck(partial.origin, [size * 2, size * 2]),
-        pointer: nullCheck(partial.pointer, null),
-        drag: partial.drag || null,
+        origin,
+        pointer,
+        drag,
         scale: 1,
         element: partial.element || null,
         message: partial.message || null,
@@ -46,6 +54,7 @@ export const patchEditorState = (...patches: Array<Partial<EditorState>>): Edito
         editing,
         loading: partial.loading,
         saving: partial.saving,
+        grid: nullCheck(partial.grid, true),
     };
     return isSameObject(first, patched) ? first as EditorState : patched;
 };
