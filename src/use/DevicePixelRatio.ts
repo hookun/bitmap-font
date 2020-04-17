@@ -11,7 +11,7 @@ export const useDevicePixelRatio = (): number => {
                 }
             };
             addEventListener('resize', onResize);
-            return (): void => removeEventListener('resize', onResize);;
+            return (): void => removeEventListener('resize', onResize);
         },
         [dpr],
     );

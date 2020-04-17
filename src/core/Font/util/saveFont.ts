@@ -10,7 +10,6 @@ export const saveFont = async (
     const storeName = names.font;
     const tr = database.transaction(storeName, 'readwrite');
     const masked = {...font};
-    delete masked.loading;
     tr.objectStore(storeName).put(masked);
     await waitTransactionCompletion(tr);
 };
