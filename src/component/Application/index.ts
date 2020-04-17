@@ -8,7 +8,6 @@ import {
     selectFontConfig,
     selectEditngCodePoints,
     selectEditorStyle,
-    selectEditor,
 } from '../../core/Editor/selector';
 import className from './style.css';
 import {selectEditorLoading} from '../../core/Editor/selector';
@@ -17,7 +16,6 @@ export const Application = (): ReactElement => {
     const codePointList = useSelector(selectEditngCodePoints);
     const configMode = useSelector(selectFontConfig);
     const style = useSelector(selectEditorStyle);
-    const editor = useSelector(selectEditor);
     useEffect(
         () => {
             if (configMode) {
@@ -56,11 +54,6 @@ export const Application = (): ReactElement => {
                         {key: codePoint, codePoint},
                     )),
                 },
-            ),
-            createElement(
-                'pre',
-                {style: {fontFamily: 'monospace'}},
-                JSON.stringify(editor, null, 2),
             ),
             createElement(GlyphSelector),
         ),

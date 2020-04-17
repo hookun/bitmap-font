@@ -8,7 +8,7 @@ import {reducer as GlyphReducer} from './Glyph/reducer';
 import {list as listFontSaga} from './Font/saga';
 import {list as listEditorSaga} from './Editor/saga';
 import {list as listGlyphSaga} from './Glyph/saga';
-import {list as listDebugSaga} from './Debug/saga';
+// import {list as listDebugSaga} from './Debug/saga';
 import {Restart, PointerDown} from './action';
 import {PressKey, ReleaseKey} from './KeyBoard/action';
 import rootClassName from '../style.css';
@@ -29,7 +29,7 @@ export const setup = (document: Document): Store => {
             ...listFontSaga(),
             ...listEditorSaga(),
             ...listGlyphSaga(),
-            ...listDebugSaga(),
+            // ...listDebugSaga(),
         ]);
     }));
     store.dispatch(Restart());
