@@ -1,8 +1,12 @@
-export interface GlyphKey {
-    fontId: string,
-    codePoint: number,
+export interface Glyph {
+    advance: number,
+    pixels: Map<number, Set<number>>,
 }
 
-export interface Glyph extends GlyphKey {
-    data: ArrayBuffer,
+export type GlyphMap = Map<number, Glyph>;
+
+export interface GlyphEntry {
+    id: string,
+    codePoint: number,
+    glyph: Glyph,
 }

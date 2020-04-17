@@ -4,9 +4,10 @@ import {all} from 'redux-saga/effects';
 import {reducer as FontReducer} from './Font/reducer';
 import {reducer as KeyboardReducer} from './KeyBoard/reducer';
 import {reducer as EditorReducer} from './Editor/reducer';
+import {reducer as GlyphReducer} from './Glyph/reducer';
 import {list as listFontSaga} from './Font/saga';
-import {list as listGlyphSaga} from './Glyph/saga';
 import {list as listEditorSaga} from './Editor/saga';
+import {list as listGlyphSaga} from './Glyph/saga';
 import {list as listDebugSaga} from './Debug/saga';
 import {Restart, PointerDown} from './action';
 import {PressKey, ReleaseKey} from './KeyBoard/action';
@@ -17,6 +18,7 @@ export const reducer = combineReducers({
     Font: FontReducer,
     Keyboard: KeyboardReducer,
     Editor: EditorReducer,
+    Glyph: GlyphReducer,
 });
 
 export const setup = (document: Document): Store => {
@@ -25,8 +27,8 @@ export const setup = (document: Document): Store => {
     sagaMiddleware.run((function* () {
         yield all([
             ...listFontSaga(),
-            ...listGlyphSaga(),
             ...listEditorSaga(),
+            ...listGlyphSaga(),
             ...listDebugSaga(),
         ]);
     }));

@@ -25,6 +25,7 @@ import {toHex} from '../../util/codePoint';
 import {isPrintable} from '../../util/isPrintable';
 import {selectEditngCodePoints} from '../../core/Editor/selector';
 import {OpenEditor, OpenEditors} from '../../core/Editor/action';
+import {Point} from '../../core/type';
 
 export const GlyphSelectorCell = (
     {
@@ -147,7 +148,7 @@ export const GlyphSelector = (): ReactElement => {
     const [
         [firstCodePoint, lastCodePoint],
         setCodePointRange,
-    ] = useState<[number, number]>([0, 0]);
+    ] = useState<Point>([0, 0]);
     const ref = useRef();
     const headerHeight = 18;
     const color = useColor(ref);

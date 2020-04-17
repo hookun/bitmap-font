@@ -1,7 +1,15 @@
-import {ReactElement, createElement, useCallback, ChangeEvent, useState, EventHandler, FormEvent, Fragment, HTMLAttributes} from 'react';
+import {
+    ReactElement,
+    createElement,
+    useCallback,
+    ChangeEvent,
+    useState,
+    EventHandler,
+    FormEvent,
+} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {classnames} from '@hookun/util/classnames';
-import {CloseFontSettings} from '../../core/Editor/action';
+import {CloseFontSettings, SetEditorConfig} from '../../core/Editor/action';
 import {selectFontConfig, selectEditor} from '../../core/Editor/selector';
 import className from './style.css';
 import {selectFont} from '../../core/Font/selector';
@@ -62,9 +70,6 @@ export const useSizeInput = (
             } else {
                 error = '整数を入力してください。';
             }
-            if (!value) {
-                error = 'フォント名を入力してください。';
-            }
             setData({value, error});
         },
         [max, min],
@@ -82,6 +87,7 @@ export const FontConfig = (): ReactElement => {
     const descent = useSizeInput(font.descent, FontStateLimits.descent);
     const width = useSizeInput(editor.width, EditorStateLimits.width);
     const height = useSizeInput(editor.height, EditorStateLimits.height);
+    const advance = useSizeInput(editor.advance, EditorStateLimits.advance);
     const close = useCallback(() => dispatch(CloseFontSettings()), [dispatch]);
     return createElement(
         'div',
@@ -103,7 +109,13 @@ export const FontConfig = (): ReactElement => {
                 onSubmit: useCallback(
                     (event: FormEvent) => {
                         event.preventDefault();
-                        const error = name.error || ascent.error || descent.error || width.error || height.error;
+                        const error = false
+                        || name.error
+                        || ascent.error
+                        || descent.error
+                        || width.error
+                        || height.error
+                        || advance.error;
                         if (error) {
                             alert(error);
                         } else {
@@ -111,13 +123,16 @@ export const FontConfig = (): ReactElement => {
                                 name: name.value,
                                 ascent: ascent.value,
                                 descent: descent.value,
+                            }));
+                            dispatch(SetEditorConfig({
                                 width: width.value,
                                 height: height.value,
+                                advance: advance.value,
                             }));
                             dispatch(CloseFontSettings());
                         }
                     },
-                    [name, ascent, descent, width, height, dispatch],
+                    [name, ascent, descent, width, height, advance, dispatch],
                 ),
             },
             createElement('h1', null, `フォントの設定 (ID: ${font.id})`),
@@ -176,6 +191,18 @@ export const FontConfig = (): ReactElement => {
                 className: className.height,
                 defaultValue: editor.height,
                 onChange: height.onChange,
+            }),
+            createElement('div', {className: className.error}, descent.error),
+            createElement('label', {htmlFor: className.advance}, 'デフォルトの文字幅'),
+            createElement('input', {
+                id: className.advance,
+                type: 'number',
+                min: advance.min,
+                max: advance.max,
+                step: advance.step,
+                className: className.advance,
+                defaultValue: editor.advance,
+                onChange: advance.onChange,
             }),
             createElement('div', {className: className.error}, descent.error),
             createElement(

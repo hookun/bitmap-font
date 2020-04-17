@@ -52,7 +52,7 @@
     }
 }
 
-.name, .asc, .desc, .width, .height {
+.name, .asc, .desc, .width, .height, .advance {
     height: 1.5rem;
     line-height: 1.5rem;
     background-image: linear-gradient(0deg, var(--ForegroundColor), var(--ForegroundColor));

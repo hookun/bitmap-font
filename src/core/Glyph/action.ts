@@ -1,9 +1,11 @@
 import {createAction} from 'typesafe-actions';
-import {Glyph, GlyphKey} from './type';
+import {Glyph, GlyphEntry} from './type';
 
-export const SetGlyph = createAction('SetGlyph')<Glyph>();
-export const DeleteGlyph = createAction('DeleteGlyph')<GlyphKey>();
-export const TogglePixel = createAction('TogglePixel')<{
-    x: number,
-    y: number,
+export const SagaSetGlyph = createAction('SagaSetGlyph')<Set<GlyphEntry>>();
+export const SetGlyph = createAction('SetGlyph')<{
+    codePoint: number,
+    glyph: Glyph,
 }>();
+export const TogglePixel = createAction('TogglePixel')<{x: number, y: number}>();
+export const IncrementAdvance = createAction('IncrementAdvance')();
+export const DecrementAdvance = createAction('DecrementAdvance')();

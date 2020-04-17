@@ -27,4 +27,4 @@ export const selectEditorStyle = createSelector(
 export const selectEditorDrag = createSelector([selectEditor], ({drag}) => drag);
 export const selectEditorLoading = createSelector([selectEditor], ({loading}) => Boolean(loading));
 export const selectEditorSaving = createSelector([selectEditor], ({saving}) => Boolean(saving));
-export const selectEditorGrid = createSelector([selectEditor], ({grid}) => grid);
+export const selectEditorAdvance = createSelector([selectEditor], ({advance}) => advance);

@@ -1,12 +1,13 @@
-import {debounce} from 'redux-saga/effects';
-import {getType} from 'typesafe-actions';
-import {onSetGlyph} from './onSetGlyph';
-import {SetGlyph} from '../action';
+import {takeEvery} from 'redux-saga/effects';
+import {TogglePixel, IncrementAdvance, DecrementAdvance} from '../action';
+import {togglePixel} from './togglePixel';
+import {controlAdvance} from './controlAdvance';
+import {saveGlyph} from './saveGlyph';
+import {loadGlyph} from './loadGlyph';
 
 export const list = () => [
-    debounce(
-        500,
-        getType(SetGlyph),
-        onSetGlyph,
-    ),
+    takeEvery(TogglePixel, togglePixel),
+    takeEvery([IncrementAdvance, DecrementAdvance], controlAdvance),
+    saveGlyph(),
+    loadGlyph(),
 ];

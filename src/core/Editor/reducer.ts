@@ -1,6 +1,6 @@
 import {createReducer, ActionType} from 'typesafe-actions';
 import {SetFontId} from '../Font/action';
-import {patchEditorState as patch} from './util/patchEditorState';
+import {patchEditorState as patch, OpacityStepCount} from './util/patchEditorState';
 import {
     EnterEditor,
     OpenEditors,
@@ -22,7 +22,11 @@ import {
     SagaSetEditor,
     SetEditorLoading,
     SetEditorSaving,
-    SetEditorGrid,
+    SetEditorConfig,
+    ChangeEditorAxis,
+    ChangeEditorBaseline,
+    ChangeEditorGrid,
+    ChangeEditorBoundingBox,
 } from './action';
 import {EditorState} from './type';
 import {projectPosition} from '../util/projectPosition';
@@ -52,7 +56,11 @@ export type EditorStateCreator =
 | typeof PointerDown
 | typeof SetEditorLoading
 | typeof SetEditorSaving
-| typeof SetEditorGrid;
+| typeof SetEditorConfig
+| typeof ChangeEditorAxis
+| typeof ChangeEditorBaseline
+| typeof ChangeEditorGrid
+| typeof ChangeEditorBoundingBox;
 
 export type EditorStateAction = ActionType<EditorStateCreator>;
 
@@ -77,10 +85,13 @@ export const reducer = createReducer<EditorState, EditorStateAction>(patch())
     editing.splice(index, 1);
     return patch(state, {editing});
 })
-.handleAction(SagaSetEditor, (state, {payload}) => patch(state, payload))
-.handleAction(EnterEditor, (state, {payload}) => patch(state, payload))
+.handleAction(
+    [SagaSetEditor, SetEditorConfig, EnterEditor],
+    (state, {payload}) => patch(state, payload),
+)
+.handleAction(LeaveEditor, (state) => state.element ? patch(state, {element: null}) : state)
 .handleAction(OpenEditorMenu, (state, {payload: codePoint}) => patch(state, {menu: codePoint}))
-.handleAction(CloseEditorMenu, (state, {payload: codePoint}) => state.menu === codePoint ? patch(state, {menu: null}) : state)
+.handleAction(CloseEditorMenu, (state) => state.menu ? patch(state, {menu: null}) : state)
 .handleAction(ToggleEditorMenu, (state, {payload: codePoint}) => patch(state, {menu: state.menu === codePoint ? null : codePoint}))
 .handleAction(SetEditorMessage, (state, {payload: {codePoint, color, text}}) => patch(state, {codePoint, message: {color, text}}))
 .handleAction(ClearEditorMessage, (state, {payload: codePoint}) => patch(state, {codePoint, message: null}))
@@ -102,4 +113,7 @@ export const reducer = createReducer<EditorState, EditorStateAction>(patch())
 .handleAction(PointerDown, (state) => patch(state, {menu: null}))
 .handleAction(SetEditorLoading, (state, {payload: loading}) => patch(state, {loading}))
 .handleAction(SetEditorSaving, (state, {payload: saving}) => patch(state, {saving}))
-.handleAction(SetEditorGrid, (state, {payload: grid}) => patch(state, {grid}));
+.handleAction(ChangeEditorAxis, (state) => patch(state, {axis: (state.axis + 1) % OpacityStepCount}))
+.handleAction(ChangeEditorBaseline, (state) => patch(state, {baseline: (state.baseline + 1) % OpacityStepCount}))
+.handleAction(ChangeEditorGrid, (state) => patch(state, {grid: (state.grid + 1) % OpacityStepCount}))
+.handleAction(ChangeEditorBoundingBox, (state) => patch(state, {boundingBox: (state.boundingBox + 1) % OpacityStepCount}));

@@ -14,6 +14,10 @@ import {selectEditor} from '../../core/Editor/selector';
 import {projectPosition} from '../../core/util/projectPosition';
 import {TogglePixel} from '../../core/Glyph/action';
 import {useColor} from '../../use/Color';
+import {Point} from '../../core/type';
+import {useGlyph} from '../../use/Glyph';
+import {selectFontDescent, selectFontAscent} from '../../core/Font/selector';
+import {OpacityStepCount} from '../../core/Editor/util/patchEditorState';
 
 export const getNearestLeft = (
     {from, step, target}: {
@@ -54,7 +58,7 @@ export const drawArrowToOrigin = (
     const aspectRatio = height / width;
     const x = ox - cx;
     const y = oy - cy;
-    let head: [number, number] | undefined;
+    let head: Point | undefined;
     switch (getDirection(x * aspectRatio, y)) {
         case 0: // Top
             head = [x * cy / y, cy];
@@ -123,14 +127,12 @@ export const drawAxis = (
     let originIsInView = true;
     ctx.beginPath();
     if (0 <= ox && ox <= width) {
-        ctx.moveTo(ox, 0);
-        ctx.lineTo(ox, height);
+        ctx.fillRect(ox, 0, 1, height);
     } else {
         originIsInView = false;
     }
     if (0 <= oy && oy <= height) {
-        ctx.moveTo(0, oy);
-        ctx.lineTo(width, oy);
+        ctx.fillRect(0, oy, width, 1);
     } else {
         originIsInView = false;
     }
@@ -151,27 +153,25 @@ export const drawGrid = (
     },
 ): void => {
     ctx.beginPath();
-    for (let x = x0 - 0.5; x <= width; x += size) {
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, height);
+    for (let x = x0; x <= width; x += size) {
+        ctx.rect(x, 0, 1, height);
     }
-    for (let y = y0 - 0.5; y <= width; y += size) {
-        ctx.moveTo(0, y);
-        ctx.lineTo(width, y);
+    for (let y = y0; y <= width; y += size) {
+        ctx.rect(0, y, width, 1);
     }
-    ctx.stroke();
+    ctx.fill();
 };
 
 export const drawPointer = (
     {ctx, width, height, pointer, size, ox, oy, drag}: {
         ctx: CanvasRenderingContext2D,
-        pointer: [number, number],
+        pointer: Point,
         width: number,
         height: number,
         size: number,
         ox: number,
         oy: number,
-        drag?: [number, number],
+        drag?: Point,
     },
 ): void => {
     let [x, y] = pointer;
@@ -182,8 +182,28 @@ export const drawPointer = (
     const x0 = getNearestLeft({from: ox, step: size, target: x});
     const y0 = getNearestLeft({from: oy, step: size, target: y});
     ctx.beginPath();
-    ctx.rect(x0 - 0.5, -0.5, size + 1, height + 1);
-    ctx.rect(-0.5, y0 - 0.5, width + 1, size + 1);
+    ctx.rect(x0, 0, size, height);
+    ctx.rect(0, y0, width, size);
+    ctx.fill();
+};
+
+export const drawBoundingLines = (
+    {ctx, width, height, size, ox, oy, ascent, descent, advance}: {
+        ctx: CanvasRenderingContext2D,
+        width: number,
+        height: number,
+        size: number,
+        ox: number,
+        oy: number,
+        ascent: number,
+        descent: number,
+        advance: number,
+    },
+): void => {
+    ctx.beginPath();
+    ctx.rect(0, oy + ascent * size, width, 1);
+    ctx.rect(0, oy + (descent === 0 ? -1 : -descent * size), width, 1);
+    ctx.rect(ox + advance * size, 0, 1, height);
     ctx.fill();
 };
 
@@ -193,9 +213,12 @@ export const GlyphEditorCanvas = (
     const dispatch = useDispatch();
     const ref = useRef<HTMLCanvasElement>();
     const editor = useSelector(selectEditor);
-    const {pointer, drag, grid} = editor;
+    const ascent = useSelector(selectFontAscent);
+    const descent = useSelector(selectFontDescent);
+    const {pointer, axis, baseline, drag, grid} = editor;
     const {origin: [ox, oy], size} = projectPosition(editor);
     const color = rgbToHex(useColor(ref));
+    const glyph = useGlyph(codePoint);
     useCanvas(
         ref,
         useCallback<Renderer>((ctx, width, height) => {
@@ -203,20 +226,41 @@ export const GlyphEditorCanvas = (
             ctx.translate(0, -height);
             const x0 = getNearestLeft({from: ox, step: size, target: 0});
             const y0 = getNearestLeft({from: oy, step: size, target: 0});
-            if (grid) {
-                ctx.strokeStyle = color;
-                ctx.globalAlpha = 0.1;
-                drawGrid({ctx, width, height, size, x0, y0});
+            {
+                ctx.beginPath();
+                for (const [columnIndex, column] of glyph.pixels) {
+                    const x = ox + columnIndex * size;
+                    for (const rowIndex of column) {
+                        const y = oy + rowIndex * size;
+                        ctx.rect(x, y, size, size);
+                    }
+                }
+                ctx.fillStyle = color;
+                ctx.fill();
             }
-            ctx.strokeStyle = 'red';
-            ctx.globalAlpha = 0.5;
-            drawAxis({ctx, width, height, ox, oy});
+            if (0 < grid) {
+                ctx.fillStyle = color;
+                ctx.globalAlpha = grid / (OpacityStepCount - 1);
+                drawGrid({ctx, width, height, size, x0, y0});
+                ctx.globalAlpha = 1;
+            }
+            if (0 < axis) {
+                ctx.fillStyle = 'red';
+                ctx.globalAlpha = axis / (OpacityStepCount - 1);
+                drawAxis({ctx, width, height, ox, oy});
+            }
+            if (0 < baseline) {
+                ctx.fillStyle = 'orange';
+                ctx.globalAlpha = baseline / (OpacityStepCount - 1);
+                drawBoundingLines({ctx, width, height, size, ox, oy, ascent, descent, advance: glyph.advance});
+            }
             if (pointer) {
                 ctx.fillStyle = color;
                 ctx.globalAlpha = 0.05;
                 drawPointer({ctx, width, height, pointer, size, ox, oy, drag});
+                ctx.globalAlpha = 1;
             }
-        }, [ox, oy, size, pointer, drag, grid, color]),
+        }, [ox, oy, size, pointer, drag, axis, baseline, grid, color, glyph, ascent, descent]),
     );
     useGrab({
         id: `${codePoint.toString(34)}`,

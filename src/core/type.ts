@@ -1,10 +1,12 @@
 import {DBStore} from '../util/DBStore';
 
+export type Point = [number, number];
+
 export interface DBStoreNames {
     app: 'app',
     editor: 'editor',
     font: 'font',
-    gryph: 'gryph',
+    glyph: 'glyph',
 }
 
 export interface DB {

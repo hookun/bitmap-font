@@ -14,8 +14,11 @@ import {
     OpenEditor,
     CloseEditor,
     SetEditorSaving,
-    SetEditorGrid,
+    ChangeEditorGrid,
+    ChangeEditorBoundingBox,
     SetEditorConfig,
+    ChangeEditorAxis,
+    ChangeEditorBaseline,
 } from '../action';
 import {loadEditor} from '../util/loadEditor';
 import {isSameObject} from '../../util/isSameObject';
@@ -46,7 +49,10 @@ export const saveChanges = function* () {
             OpenEditors,
             OpenEditor,
             CloseEditor,
-            SetEditorGrid,
+            ChangeEditorAxis,
+            ChangeEditorBaseline,
+            ChangeEditorGrid,
+            ChangeEditorBoundingBox,
             SetEditorConfig,
         ].map(getType));
         if (task) {

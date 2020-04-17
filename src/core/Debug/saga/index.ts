@@ -7,7 +7,7 @@ export const list = () => [
             case 'SetEditorPointer':
                 break;
             default:
-                console.log(action);
+                console.log(JSON.stringify(action));
         }
     }),
 ];

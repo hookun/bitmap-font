@@ -6,7 +6,7 @@ export const selectDBStoreNames = createSelector([], (): DBStoreNames => ({
     app: 'app',
     font: 'font',
     editor: 'editor',
-    gryph: 'gryph',
+    glyph: 'glyph',
 }));
 export const selectDB = createSelector(
     [selectDBStoreNames],
@@ -19,7 +19,7 @@ export const selectDB = createSelector(
                 [names.app]: null,
                 [names.font]: {keyPath: ['id']},
                 [names.editor]: {keyPath: ['id']},
-                [names.gryph]: {keyPath: ['id', 'codePoint']},
+                [names.glyph]: {keyPath: ['id', 'codePoint']},
             },
         }),
     }),

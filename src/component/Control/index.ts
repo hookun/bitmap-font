@@ -5,12 +5,11 @@ import {
     useCallback,
 } from 'react';
 import {classnames} from '@hookun/util/classnames';
-import {InputBoolean} from '../InputBoolean';
 import {useIntersection} from '../../use/Intersection';
 import {useSelector, useDispatch} from 'react-redux';
 import {selectFont} from '../../core/Font/selector';
-import {OpenFontSettings, SetEditorGrid} from '../../core/Editor/action';
-import {selectEditor, selectEditorGrid} from '../../core/Editor/selector';
+import {OpenFontSettings, ChangeEditorGrid, ChangeEditorBoundingBox, ChangeEditorAxis, ChangeEditorBaseline} from '../../core/Editor/action';
+import {selectEditor} from '../../core/Editor/selector';
 import className from './style.css';
 
 export const Control = (): ReactElement => {
@@ -44,16 +43,46 @@ export const Control = (): ReactElement => {
             {
                 className: className.labeled,
                 onClick: openConfig,
-                'data-type': typeof value,
             },
             createElement('div', {className: className.label}, label),
             `${value}`,
         )),
-        createElement(InputBoolean, {
-            label: '罫線',
-            selector: selectEditorGrid,
-            action: SetEditorGrid,
-        }),
+        createElement(
+            'button',
+            {
+                className: className.labeled,
+                onClick: useCallback(() => dispatch(ChangeEditorAxis()), [dispatch]),
+            },
+            createElement('div', {className: className.label}, '軸'),
+            `${editor.axis}`,
+        ),
+        createElement(
+            'button',
+            {
+                className: className.labeled,
+                onClick: useCallback(() => dispatch(ChangeEditorBaseline()), [dispatch]),
+            },
+            createElement('div', {className: className.label}, '基準線'),
+            `${editor.baseline}`,
+        ),
+        createElement(
+            'button',
+            {
+                className: className.labeled,
+                onClick: useCallback(() => dispatch(ChangeEditorGrid()), [dispatch]),
+            },
+            createElement('div', {className: className.label}, '罫線'),
+            `${editor.grid}`,
+        ),
+        createElement(
+            'button',
+            {
+                className: className.labeled,
+                onClick: useCallback(() => dispatch(ChangeEditorBoundingBox()), [dispatch]),
+            },
+            createElement('div', {className: className.label}, '囲み枠'),
+            `${editor.boundingBox}`,
+        ),
         createElement('div', {className: className.spacer}),
     );
 };

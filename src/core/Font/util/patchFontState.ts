@@ -5,8 +5,8 @@ import {isSameObject} from '../../util/isSameObject';
 import {generateNewId} from '../../util/generateFontId';
 
 export const FontStateLimits = {
-    ascent: {min: 5, max: 2000, default: 9},
-    descent: {min: 0, max: 1000, default: 10},
+    ascent: {min: 5, max: 2000, default: 12},
+    descent: {min: 0, max: 1000, default: 6},
 };
 
 export const patchFontState = (...patches: Array<Partial<FontState>>): FontState => {

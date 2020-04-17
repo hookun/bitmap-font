@@ -5,10 +5,13 @@ import {isSameArray} from '../../util/isSameArray';
 import {isPrintable} from '../../../util/isPrintable';
 import {clamp} from '@hookun/util/clamp';
 import {generateNewId} from '../../util/generateFontId';
+import {Point} from '../../type';
 
+export const OpacityStepCount = 6;
 export const EditorStateLimits = {
     width: {min: 10, max: 100, default: 14},
     height: {min: 10, max: 100, default: 16},
+    advance: {min: 6, max: 1000, default: 12},
 };
 
 export const patchEditorState = (...patches: Array<Partial<EditorState>>): EditorState => {
@@ -19,9 +22,9 @@ export const patchEditorState = (...patches: Array<Partial<EditorState>>): Edito
     if (editing.length === 0) {
         editing.push(65, 66, 67, 12354, 12356, 12358);
     }
-    let origin: [number, number] = nullCheck(partial.origin, [size * 2, size * 2]);
-    let pointer: [number, number] | null = partial.pointer;
-    let drag: [number, number] | null = partial.drag;
+    let origin: Point = nullCheck(partial.origin, [size * 2, size * 2]);
+    let pointer: Point | null = partial.pointer;
+    let drag: Point | null = partial.drag;
     if (first) {
         if (isSameArray(first.origin, origin)) {
             origin = first.origin;
@@ -36,7 +39,7 @@ export const patchEditorState = (...patches: Array<Partial<EditorState>>): Edito
             drag = first.drag;
         }
     }
-    const {width, height} = EditorStateLimits;
+    const {width, height, advance} = EditorStateLimits;
     const patched: EditorState = {
         id: nullCheck(partial.id, generateNewId()),
         codePoint: partial.codePoint || null,
@@ -51,10 +54,14 @@ export const patchEditorState = (...patches: Array<Partial<EditorState>>): Edito
         config: Boolean(partial.config),
         width: clamp(nullCheck(partial.width, width.default), width.min, width.max),
         height: clamp(nullCheck(partial.height, height.default), height.min, height.max),
+        advance: clamp(nullCheck(partial.advance, advance.default), advance.min, advance.max),
         editing,
         loading: partial.loading,
         saving: partial.saving,
-        grid: nullCheck(partial.grid, true),
+        axis: nullCheck(partial.axis, 2) % OpacityStepCount,
+        baseline: nullCheck(partial.baseline, 2) % OpacityStepCount,
+        grid: nullCheck(partial.grid, 1) % OpacityStepCount,
+        boundingBox: nullCheck(partial.boundingBox, 2) % OpacityStepCount,
     };
     return isSameObject(first, patched) ? first as EditorState : patched;
 };

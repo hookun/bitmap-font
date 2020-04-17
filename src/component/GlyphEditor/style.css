@@ -85,12 +85,34 @@
     opacity: 0.7;
 }
 
-.hex {
+.data {
     grid-area: hex;
     align-self: end;
-    justify-self: start;
+    justify-self: stretch;
+    display: flex;
+    align-items: center;
     font-size: 1rem;
     font-weight: 700;
     line-height: 1;
     text-shadow: 0 -0.1rem 0.2rem var(--BackgroundColor);
+}
+
+.advance {
+    margin: 0 0.3rem;
+    text-align: center;
+}
+
+.icon {
+    --Size: 0.7rem;
+    flex: 0 0 var(--Size);
+    height: var(--Size);
+    stroke: var(--ForegroundColor);
+    stroke-width: 1;
+    box-shadow: 0 0 0 1px var(--ForegroundColor);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: transform 0.1s;
+    &:active {
+        transform: scale(0.9);
+    }
 }

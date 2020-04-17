@@ -1,3 +1,5 @@
+import {Point} from '../type';
+
 export interface EditorMessage {
     color?: string,
     text: string,
@@ -8,17 +10,21 @@ export type EditorState = {
     codePoint: number | null,
     menu: number | null,
     size: number,
-    origin: [number, number],
-    drag: [number, number] | null,
+    origin: Point,
+    drag: Point | null,
     scale: number,
-    pointer: [number, number] | null,
+    pointer: Point | null,
     element: string | null,
     message: EditorMessage | null,
     config: boolean,
     editing: Array<number>,
     width: number,
     height: number,
+    advance: number,
     loading?: boolean,
     saving?: boolean,
-    grid: boolean,
+    axis: number,
+    baseline: number,
+    grid: number,
+    boundingBox: number,
 };

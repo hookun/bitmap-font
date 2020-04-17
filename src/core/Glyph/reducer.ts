@@ -1,20 +1,32 @@
 import {
-    SetGlyph,
-    DeleteGlyph,
+    SetGlyph, SagaSetGlyph,
 } from './action';
-import {Glyph} from './type';
-import {SetFontId} from '../Font/action';
+import {GlyphMap} from './type';
 import {createReducer, ActionType} from 'typesafe-actions';
+import {CloseEditor} from '../Editor/action';
 
 export type GlyphActionCreator =
-| typeof SetFontId
-| typeof SetGlyph
-| typeof DeleteGlyph;
+| typeof SagaSetGlyph
+| typeof CloseEditor
+| typeof SetGlyph;
 
 export type GlyphAction = ActionType<GlyphActionCreator>;
 
-export const reducer = createReducer<Map<number, ArrayBuffer>, GlyphAction>(new Map())
-.handleAction(SetGlyph, (map, {payload: {codePoint, x, y}}) => {
-    console.log(codePoint, x, y);
+export const reducer = createReducer<GlyphMap, GlyphAction>(new Map())
+.handleAction(SagaSetGlyph, (oldMap, {payload: added}) => {
+    const map = new Map(oldMap);
+    for (const {codePoint, glyph} of added) {
+        map.set(codePoint, glyph);
+    }
+    return map;
+})
+.handleAction(CloseEditor, (oldMap, {payload: codePoint}) => {
+    const map = new Map(oldMap);
+    map.delete(codePoint);
+    return map;
+})
+.handleAction(SetGlyph, (oldMap, {payload: {codePoint, glyph}}) => {
+    const map = new Map(oldMap);
+    map.set(codePoint, glyph);
     return map;
 });

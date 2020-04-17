@@ -1,14 +1,16 @@
+import {Point} from '../type';
+
 export interface ProjectResult {
     size: number,
-    origin: [number, number],
+    origin: Point,
 }
 
 export const projectPosition = (
     {size, origin, pointer, drag, scale}: {
         size: number,
-        origin: [number, number],
-        pointer: [number, number],
-        drag: [number, number],
+        origin: Point,
+        pointer: Point,
+        drag: Point,
         scale: number,
     },
 ): ProjectResult => {
