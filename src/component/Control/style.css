@@ -5,7 +5,7 @@
     display: flex;
     align-items: flex-end;
     width: 100%;
-    padding: calc(0.25rem + 1px) 0 0.15rem 0;
+    padding: calc(0.25rem + 1px) var(--BasePadding) 0.15rem var(--BasePadding);
     background-color: var(--BackgroundColor);
     overflow-x: auto;
     &.stuck {
@@ -15,11 +15,6 @@
     &>* {
         flex-shrink: 0;
         margin: 0.25rem 0.5rem 0.25rem 0;
-    }
-    &>.spacer {
-        width: var(--BasePadding);
-        height: 1em;
-        margin: 0;
     }
 }
 

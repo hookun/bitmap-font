@@ -3,7 +3,7 @@
     --MainLineColor: var(--ForegroundColor);
     display: grid;
     grid-template-columns: var(--CharacterSize) 1fr;
-    column-gap: 0.2rem;
+    column-gap: 0.4rem;
     grid-template-rows: 1rem 1.4rem 1rem 1fr;
     grid-template-areas:
         'message   message'
@@ -108,7 +108,7 @@
     height: var(--Size);
     stroke: var(--ForegroundColor);
     stroke-width: 1;
-    box-shadow: 0 0 0 1px var(--ForegroundColor);
+    box-shadow: 0 0 0 1px var(--ForegroundColor) inset;
     border-radius: 2px;
     cursor: pointer;
     transition: transform 0.1s;

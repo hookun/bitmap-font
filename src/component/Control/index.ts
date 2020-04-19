@@ -31,7 +31,6 @@ export const Control = (): ReactElement => {
                 intersection < 1 && className.stuck,
             ),
         },
-        createElement('div', {className: className.spacer}),
         ...[
             ['フォント名', font.name],
             ['上端', font.ascent],
@@ -83,6 +82,5 @@ export const Control = (): ReactElement => {
             createElement('div', {className: className.label}, '囲み枠'),
             `${editor.boundingBox}`,
         ),
-        createElement('div', {className: className.spacer}),
     );
 };
