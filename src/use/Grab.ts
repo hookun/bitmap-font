@@ -83,7 +83,7 @@ export const useGrab = (
         onClick = noop,
         onRelease = noop,
         scaleSensitivity = 0.0001,
-        clickThreshold = 30,
+        clickThreshold = 4,
     }: {
         id: string,
         ref: MutableRefObject<HTMLElement>,
