@@ -18,6 +18,7 @@ import {Point} from '../../core/type';
 import {useGlyph} from '../../use/Glyph';
 import {selectFontDescent, selectFontAscent} from '../../core/Font/selector';
 import {OpacityStepCount} from '../../core/Editor/util/patchEditorState';
+import {useBoundingBox} from '../../use/BoundingBox';
 
 export const getNearestLeft = (
     {from, step, target}: {
@@ -215,10 +216,11 @@ export const GlyphEditorCanvas = (
     const editor = useSelector(selectEditor);
     const ascent = useSelector(selectFontAscent);
     const descent = useSelector(selectFontDescent);
-    const {pointer, axis, baseline, drag, grid} = editor;
+    const {pointer, axis, baseline, drag, grid, boundingBox} = editor;
     const {origin: [ox, oy], size} = projectPosition(editor);
     const color = rgbToHex(useColor(ref));
     const glyph = useGlyph(codePoint);
+    const bb = useBoundingBox(boundingBox ? glyph : null);
     useCanvas(
         ref,
         useCallback<Renderer>((ctx, width, height) => {
@@ -255,13 +257,20 @@ export const GlyphEditorCanvas = (
                 ctx.globalAlpha = baseline / (OpacityStepCount - 1);
                 drawBoundingLines({ctx, width, height, size, ox, oy, ascent, descent, advance: glyph.advance});
             }
+            if (0 < boundingBox) {
+                ctx.strokeStyle = 'pink';
+                ctx.globalAlpha = boundingBox / (OpacityStepCount - 1);
+                ctx.beginPath();
+                ctx.rect(ox + bb.x * size, oy + bb.y * size, bb.width * size, bb.height * size);
+                ctx.stroke();
+            }
             if (pointer) {
                 ctx.fillStyle = color;
                 ctx.globalAlpha = 0.05;
                 drawPointer({ctx, width, height, pointer, size, ox, oy, drag});
                 ctx.globalAlpha = 1;
             }
-        }, [ox, oy, size, pointer, drag, axis, baseline, grid, color, glyph, ascent, descent]),
+        }, [ox, oy, size, pointer, drag, axis, baseline, grid, color, glyph, ascent, descent, boundingBox, bb]),
     );
     useGrab({
         id: `${codePoint.toString(34)}`,

@@ -111,9 +111,12 @@ export const useGrab = (
             if (grabbing) {
                 const dx = pos.x - grabbing.clientX;
                 const dy = grabbing.clientY - pos.y;
-                onDrag({...grabbing, dx, dy});
-                if (clickFlag && clickThreshold < Math.hypot(dx, dy)) {
-                    clickFlag = false;
+                if (clickFlag) {
+                    if (clickThreshold < Math.hypot(dx, dy)) {
+                        clickFlag = false;
+                    }
+                } else {
+                    onDrag({...grabbing, dx, dy});
                 }
             } else {
                 onHover(getGrabbing(pos, element));

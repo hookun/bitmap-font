@@ -61,7 +61,7 @@ export const patchEditorState = (...patches: Array<Partial<EditorState>>): Edito
         axis: nullCheck(partial.axis, 2) % OpacityStepCount,
         baseline: nullCheck(partial.baseline, 2) % OpacityStepCount,
         grid: nullCheck(partial.grid, 1) % OpacityStepCount,
-        boundingBox: nullCheck(partial.boundingBox, 2) % OpacityStepCount,
+        boundingBox: nullCheck(partial.boundingBox, 0) % OpacityStepCount,
     };
     return isSameObject(first, patched) ? first as EditorState : patched;
 };
