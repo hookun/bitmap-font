@@ -23,6 +23,7 @@ export type EditorState = {
     advance: number,
     loading?: boolean,
     saving?: boolean,
+    scroll?: boolean,
     axis: number,
     baseline: number,
     grid: number,

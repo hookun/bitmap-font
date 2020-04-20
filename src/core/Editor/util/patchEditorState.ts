@@ -58,6 +58,7 @@ export const patchEditorState = (...patches: Array<Partial<EditorState>>): Edito
         editing,
         loading: partial.loading,
         saving: partial.saving,
+        scroll: partial.scroll,
         axis: nullCheck(partial.axis, 2) % OpacityStepCount,
         baseline: nullCheck(partial.baseline, 2) % OpacityStepCount,
         grid: nullCheck(partial.grid, 1) % OpacityStepCount,

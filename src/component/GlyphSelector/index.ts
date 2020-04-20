@@ -7,6 +7,8 @@ import {
     useState,
     Fragment,
     FormEvent,
+    useEffect,
+    MutableRefObject,
 } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {classnames} from '@hookun/util/classnames';
@@ -22,8 +24,8 @@ import {useScrollBarSize} from '../../use/ScrollBarSize';
 import {MaxCodePoint} from '../../constants';
 import {toHex} from '../../util/codePoint';
 import {isPrintable} from '../../util/isPrintable';
-import {selectEditngCodePoints} from '../../core/Editor/selector';
-import {OpenEditor, OpenEditors} from '../../core/Editor/action';
+import {selectEditngCodePoints, selectEditorScroll, selectEditorCodePoint} from '../../core/Editor/selector';
+import {OpenEditor, OpenEditors, SetEditorScroll} from '../../core/Editor/action';
 import {Point} from '../../core/type';
 import {useGlyph} from '../../use/Glyph';
 import {selectFontAscent, selectFontDescent} from '../../core/Font/selector';
@@ -157,12 +159,30 @@ export const GlyphForm = (): ReactElement => {
     );
 };
 
+export const useScroll = (
+    ref: MutableRefObject<FixedSizeGrid>,
+    columnCount: number,
+): void => {
+    const codePoint = useSelector(selectEditorCodePoint);
+    const scroll = useSelector(selectEditorScroll);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        if (scroll && 0 < codePoint && 0 < columnCount) {
+            const rowIndex = Math.floor(codePoint / columnCount);
+            const columnIndex = codePoint - rowIndex * columnCount;
+            ref.current.scrollToItem({align: 'center', rowIndex, columnIndex});
+            dispatch(SetEditorScroll(false));
+        }
+    }, [scroll, dispatch, ref, codePoint, columnCount]);
+};
+
 export const GlyphSelector = (): ReactElement => {
     const [
         [firstCodePoint, lastCodePoint],
         setCodePointRange,
     ] = useState<Point>([0, 0]);
-    const ref = useRef();
+    const ref = useRef<HTMLDivElement>();
+    const gridRef = useRef<FixedSizeGrid>();
     const headerHeight = 18;
     const color = useColor(ref);
     const scrollBarWidth = useScrollBarSize();
@@ -178,6 +198,7 @@ export const GlyphSelector = (): ReactElement => {
         const columnWidth = Math.floor(availableWidth / columnCount);
         const rowHeight = columnWidth + headerHeight + 1;
         return {
+            ref: gridRef,
             width,
             height,
             columnCount,
@@ -202,7 +223,8 @@ export const GlyphSelector = (): ReactElement => {
                 (visibleRowStopIndex - 1) * columnCount + visibleColumnStopIndex,
             ]),
         };
-    }, [width, height, scrollBarWidth, color]);
+    }, [gridRef, width, height, scrollBarWidth, color]);
+    useScroll(gridRef, props ? props.columnCount : 0);
     const RowWidth = props ? props.columnCount * props.columnWidth : 0;
     return createElement(
         Fragment,

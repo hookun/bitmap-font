@@ -28,6 +28,7 @@ import {
     ChangeEditorGrid,
     ChangeEditorBoundingBox,
     ReplaceEditor,
+    SetEditorScroll,
 } from './action';
 import {EditorState} from './type';
 import {projectPosition} from '../util/projectPosition';
@@ -62,7 +63,8 @@ export type EditorStateCreator =
 | typeof ChangeEditorBaseline
 | typeof ChangeEditorGrid
 | typeof ChangeEditorBoundingBox
-| typeof ReplaceEditor;
+| typeof ReplaceEditor
+| typeof SetEditorScroll;
 
 export type EditorStateAction = ActionType<EditorStateCreator>;
 
@@ -122,6 +124,7 @@ export const reducer = createReducer<EditorState, EditorStateAction>(patch())
 .handleAction(PointerDown, (state) => patch(state, {menu: null}))
 .handleAction(SetEditorLoading, (state, {payload: loading}) => patch(state, {loading}))
 .handleAction(SetEditorSaving, (state, {payload: saving}) => patch(state, {saving}))
+.handleAction(SetEditorScroll, (state, {payload: scroll}) => patch(state, {scroll}))
 .handleAction(ChangeEditorAxis, (state) => patch(state, {axis: (state.axis + 1) % OpacityStepCount}))
 .handleAction(ChangeEditorBaseline, (state) => patch(state, {baseline: (state.baseline + 1) % OpacityStepCount}))
 .handleAction(ChangeEditorGrid, (state) => patch(state, {grid: (state.grid + 1) % OpacityStepCount}))

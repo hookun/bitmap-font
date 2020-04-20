@@ -1,7 +1,7 @@
 import {createElement, ReactElement, useCallback, MouseEvent} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {classnames} from '@hookun/util/classnames';
-import {SetEditorMessage, CloseEditor} from '../../core/Editor/action';
+import {SetEditorMessage, CloseEditor, SetEditorScroll} from '../../core/Editor/action';
 import className from './style.css';
 import rootClassName from '../../style.css';
 import {DeleteGlyph} from '../../core/Glyph/action';
@@ -45,6 +45,16 @@ export const GlyphEditorMenu = ({codePoint}: {codePoint: number}): ReactElement 
             },
             '文字をコピー：',
             createElement('div', null, character),
+        ),
+        createElement(
+            'button',
+            {
+                onClick: useCallback(
+                    () => dispatch(SetEditorScroll(true)),
+                    [dispatch],
+                ),
+            },
+            '文字選択画面に表示',
         ),
         createElement(
             'a',

@@ -30,6 +30,7 @@ export const selectEditorStyle = createSelector(
 );
 export const selectEditorLoading = createSelector([selectEditor], ({loading}) => Boolean(loading));
 export const selectEditorSaving = createSelector([selectEditor], ({saving}) => Boolean(saving));
+export const selectEditorScroll = createSelector([selectEditor], ({scroll}) => Boolean(scroll));
 export const selectEditorAdvance = createSelector([selectEditor], ({advance}) => advance);
 export const selectEditorSize = createSelector([selectEditor], ({size}) => size);
 export const selectEditorOrigin = createSelector([selectEditor], ({origin}) => origin);

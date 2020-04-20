@@ -56,3 +56,4 @@ export const ReplaceEditor = createAction('ReplaceEditor')<{
     dragged: number,
     target: number,
 }>();
+export const SetEditorScroll = createAction('SetEditorScroll')<boolean>();
