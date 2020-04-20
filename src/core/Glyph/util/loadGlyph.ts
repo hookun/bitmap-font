@@ -2,7 +2,7 @@ import {waitTransactionCompletion} from '../../../util/DBStore';
 import {GlyphEntry} from '../type';
 import {DB} from '../../type';
 
-export const loadGlyph = async (
+export const $loadGlyph = async (
     {names, store}: DB,
     id: string,
     codePointList: Array<number>,
@@ -37,4 +37,24 @@ export const loadGlyph = async (
     }
     await waitTransactionCompletion(tr);
     return set;
+};
+
+const loadings = new Map<string, Promise<Set<GlyphEntry>>>();
+
+export const loadGlyph = async (
+    db: DB,
+    id: string,
+    codePointList: Array<number>,
+): Promise<Set<GlyphEntry>> => {
+    const key = `${id}-${codePointList.join('-')}`;
+    let promise = loadings.get(key);
+    if (!promise) {
+        promise = $loadGlyph(db, id, codePointList)
+        .then((set) => {
+            loadings.delete(key);
+            return set;
+        });
+        loadings.set(key, promise);
+    }
+    return promise;
 };

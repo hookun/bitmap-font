@@ -24,7 +24,7 @@ export const useGlyph = (codePoint: number): Glyph => {
             if (glyph !== editing) {
                 setGlyph(editing);
             }
-        } else {
+        } else if (glyph === defaultGlyph) {
             loadGlyph(db, fontId, [codePoint])
             .then((glyphSet) => {
                 if (!canceled) {
