@@ -43,7 +43,10 @@ export const useRectSize = (
     useEffect(() => {
         onResize();
         addEventListener('resize', onResize);
-        return (): void => removeEventListener('resize', onResize);
+        return (): void => {
+            onResize.cancel();
+            removeEventListener('resize', onResize);
+        };
     }, [onResize]);
     return rectSize;
 };

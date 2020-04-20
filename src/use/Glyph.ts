@@ -19,6 +19,7 @@ export const useGlyph = (codePoint: number): Glyph => {
     const fontId = useSelector(selectFontId);
     const editing = map.get(codePoint);
     useEffect(() => {
+        let canceled = false;
         if (editing) {
             if (glyph !== editing) {
                 setGlyph(editing);
@@ -26,12 +27,17 @@ export const useGlyph = (codePoint: number): Glyph => {
         } else {
             loadGlyph(db, fontId, [codePoint])
             .then((glyphSet) => {
-                for (const glyphEntry of glyphSet.values()) {
-                    setGlyph(glyphEntry.glyph);
-                    return;
+                if (!canceled) {
+                    for (const glyphEntry of glyphSet.values()) {
+                        setGlyph(glyphEntry.glyph);
+                        return;
+                    }
                 }
             });
         }
+        return (): void => {
+            canceled = true;
+        };
     }, [glyph, editing, codePoint, fontId, db]);
     return glyph;
 };
