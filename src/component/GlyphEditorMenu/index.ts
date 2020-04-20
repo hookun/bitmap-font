@@ -5,6 +5,7 @@ import {SetEditorMessage, CloseEditor} from '../../core/Editor/action';
 import {useEditorMenuState} from '../../use/EditorStateMenu';
 import className from './style.css';
 import rootClassName from '../../style.css';
+import {DeleteGlyph} from '../../core/Glyph/action';
 
 export const GlyphEditorMenu = ({codePoint}: {codePoint: number}): ReactElement => {
     const dispatch = useDispatch();
@@ -57,11 +58,21 @@ export const GlyphEditorMenu = ({codePoint}: {codePoint: number}): ReactElement 
             'button',
             {
                 onClick: useCallback(
+                    () => dispatch(DeleteGlyph(codePoint)),
+                    [dispatch, codePoint],
+                ),
+            },
+            'グリフを消す',
+        ),
+        createElement(
+            'button',
+            {
+                onClick: useCallback(
                     () => dispatch(CloseEditor(codePoint)),
                     [dispatch, codePoint],
                 ),
             },
-            '閉じる',
+            'エディタを閉じる',
         ),
     );
 };

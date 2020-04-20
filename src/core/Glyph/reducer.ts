@@ -1,5 +1,7 @@
 import {
-    SetGlyph, SagaSetGlyph,
+    SetGlyph,
+    SagaSetGlyph,
+    DeleteGlyph,
 } from './action';
 import {GlyphMap} from './type';
 import {createReducer, ActionType} from 'typesafe-actions';
@@ -8,7 +10,8 @@ import {CloseEditor} from '../Editor/action';
 export type GlyphActionCreator =
 | typeof SagaSetGlyph
 | typeof CloseEditor
-| typeof SetGlyph;
+| typeof SetGlyph
+| typeof DeleteGlyph;
 
 export type GlyphAction = ActionType<GlyphActionCreator>;
 
@@ -28,5 +31,10 @@ export const reducer = createReducer<GlyphMap, GlyphAction>(new Map())
 .handleAction(SetGlyph, (oldMap, {payload: {codePoint, glyph}}) => {
     const map = new Map(oldMap);
     map.set(codePoint, glyph);
+    return map;
+})
+.handleAction(DeleteGlyph, (oldMap, {payload: codePoint}) => {
+    const map = new Map(oldMap);
+    map.delete(codePoint);
     return map;
 });
