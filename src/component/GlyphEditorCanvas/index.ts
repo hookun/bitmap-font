@@ -227,16 +227,17 @@ export const GlyphEditorCanvas = (
             const x0 = getNearestLeft({from: ox, step: size, target: 0});
             const y0 = getNearestLeft({from: oy, step: size, target: 0});
             {
+                ctx.save();
+                ctx.transform(size, 0, 0, size, ox, oy);
                 ctx.beginPath();
-                for (const [columnIndex, column] of glyph.pixels) {
-                    const x = ox + columnIndex * size;
-                    for (const rowIndex of column) {
-                        const y = oy + rowIndex * size;
-                        ctx.rect(x, y, size, size);
+                for (const [x, column] of glyph.pixels) {
+                    for (const y of column) {
+                        ctx.rect(x, y, 1, 1);
                     }
                 }
                 ctx.fillStyle = color;
                 ctx.fill();
+                ctx.restore();
             }
             if (0 < grid) {
                 ctx.fillStyle = color;

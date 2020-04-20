@@ -1,10 +1,10 @@
-import {createElement, ReactElement, useCallback} from 'react';
+import {createElement, ReactElement, useCallback, DragEvent} from 'react';
 import {useDispatch} from 'react-redux';
 import className from './style.css';
 import {useUCD} from '../../use/UCD';
 import {toHex} from '../../util/codePoint';
 import {useEditorMessage} from '../../use/EditorMessage';
-import {EnterEditor, LeaveEditor} from '../../core/Editor/action';
+import {EnterEditor, LeaveEditor, ReplaceEditor} from '../../core/Editor/action';
 import {GlyphEditorMenu} from '../GlyphEditorMenu';
 import {Character} from './character';
 import {GlyphEditorCanvas} from '../GlyphEditorCanvas';
@@ -58,6 +58,20 @@ export const GlyphEditor = ({codePoint}: {codePoint: number}): ReactElement => {
             onMouseEnter: onEnter,
             onMouseLeave: onLeave,
             onTouchStart: onEnter,
+            onDragStart: useCallback(({nativeEvent}: DragEvent) => {
+                nativeEvent.dataTransfer.setData('text/plain', codePoint.toString(16));
+            }, [codePoint]),
+            onDragOver: useCallback((event: DragEvent) => {
+                event.preventDefault();
+                console.log('over');
+            }, []),
+            onDrop: useCallback(({nativeEvent}: DragEvent) => {
+                const dragged = parseInt(nativeEvent.dataTransfer.getData('text/plain'), 16);
+                if (0 < dragged && dragged !== codePoint) {
+                    dispatch(ReplaceEditor({dragged, target: codePoint}));
+                }
+            }, [dispatch, codePoint]),
+            draggable: true,
         },
         message && createElement(
             'div',

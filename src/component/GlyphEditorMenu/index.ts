@@ -72,7 +72,7 @@ export const GlyphEditorMenu = ({codePoint}: {codePoint: number}): ReactElement 
                     [dispatch, codePoint],
                 ),
             },
-            'エディタを閉じる',
+            '閉じる (Ctrl)',
         ),
     );
 };

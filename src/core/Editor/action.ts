@@ -52,3 +52,7 @@ export const ChangeEditorAxis = createAction('ChangeEditorAxis')();
 export const ChangeEditorBaseline = createAction('ChangeEditorBaseline')();
 export const ChangeEditorGrid = createAction('ChangeEditorGrid')();
 export const ChangeEditorBoundingBox = createAction('ChangeEditorBoundingBox')();
+export const ReplaceEditor = createAction('ReplaceEditor')<{
+    dragged: number,
+    target: number,
+}>();

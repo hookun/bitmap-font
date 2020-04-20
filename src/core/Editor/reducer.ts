@@ -27,6 +27,7 @@ import {
     ChangeEditorBaseline,
     ChangeEditorGrid,
     ChangeEditorBoundingBox,
+    ReplaceEditor,
 } from './action';
 import {EditorState} from './type';
 import {projectPosition} from '../util/projectPosition';
@@ -60,7 +61,8 @@ export type EditorStateCreator =
 | typeof ChangeEditorAxis
 | typeof ChangeEditorBaseline
 | typeof ChangeEditorGrid
-| typeof ChangeEditorBoundingBox;
+| typeof ChangeEditorBoundingBox
+| typeof ReplaceEditor;
 
 export type EditorStateAction = ActionType<EditorStateCreator>;
 
@@ -116,4 +118,24 @@ export const reducer = createReducer<EditorState, EditorStateAction>(patch())
 .handleAction(ChangeEditorAxis, (state) => patch(state, {axis: (state.axis + 1) % OpacityStepCount}))
 .handleAction(ChangeEditorBaseline, (state) => patch(state, {baseline: (state.baseline + 1) % OpacityStepCount}))
 .handleAction(ChangeEditorGrid, (state) => patch(state, {grid: (state.grid + 1) % OpacityStepCount}))
-.handleAction(ChangeEditorBoundingBox, (state) => patch(state, {boundingBox: (state.boundingBox + 1) % OpacityStepCount}));
+.handleAction(ChangeEditorBoundingBox, (state) => patch(state, {boundingBox: (state.boundingBox + 1) % OpacityStepCount}))
+.handleAction(ReplaceEditor, (state, {payload: {dragged, target}}) => {
+    const editing = state.editing.slice();
+    const draggedIndex = editing.indexOf(dragged);
+    if (draggedIndex < 0) {
+        return state;
+    }
+    editing.splice(draggedIndex, 1);
+    let targetIndex = editing.indexOf(target);
+    if (targetIndex < 0) {
+        return state;
+    } else if (draggedIndex <= targetIndex) {
+        targetIndex += 1;
+    }
+    editing.splice(targetIndex, 0, dragged);
+    return patch(state, {
+        editing: [
+            ...editing.slice(0, target),
+        ],
+    });
+});

@@ -2,7 +2,6 @@ import {
     useRef,
     ReactElement,
     createElement,
-    useEffect,
     useMemo,
     useCallback,
     useState,
@@ -17,7 +16,7 @@ import {
     GridChildComponentProps,
 } from 'react-window';
 import className from './style.css';
-import {getRectSize, useRectSize} from '../../use/RectSize';
+import {useRectSize} from '../../use/RectSize';
 import {useColor} from '../../use/Color';
 import {useScrollBarSize} from '../../use/ScrollBarSize';
 import {MaxCodePoint} from '../../constants';
@@ -26,6 +25,9 @@ import {isPrintable} from '../../util/isPrintable';
 import {selectEditngCodePoints} from '../../core/Editor/selector';
 import {OpenEditor, OpenEditors} from '../../core/Editor/action';
 import {Point} from '../../core/type';
+import {useGlyph} from '../../use/Glyph';
+import {selectFontAscent, selectFontDescent} from '../../core/Font/selector';
+import {useCanvas} from '../../use/Canvas';
 
 export const GlyphSelectorCell = (
     {
@@ -52,31 +54,42 @@ export const GlyphSelectorCell = (
     const printable = isPrintable(codePoint);
     const hex = toHex(codePoint);
     const codePointList = useSelector(selectEditngCodePoints);
-    useEffect(() => {
-        if (printable) {
-            const {width, height, element: canvas} = getRectSize(ref);
-            if (canvas) {
-                const character = String.fromCodePoint(codePoint);
-                const ctx = canvas.getContext('2d');
-                const dpr = devicePixelRatio;
-                Object.assign(canvas, {width: width * dpr, height: height * dpr});
-                ctx.scale(dpr, dpr);
-                const cx = 1 + (width - 1) / 2;
-                {
-                    ctx.save();
-                    ctx.textBaseline = 'middle';
-                    ctx.textAlign = 'center';
-                    ctx.fillStyle = color;
-                    ctx.shadowOffsetY = 1;
-                    ctx.shadowColor = inverseColor;
-                    ctx.shadowBlur = 2;
-                    ctx.font = `${(headerHeight * 0.9).toFixed(1)}px sans-serif`;
-                    ctx.fillText(character, cx, 1 + headerHeight / 2);
-                    ctx.restore();
+    const ascent = useSelector(selectFontAscent);
+    const descent = useSelector(selectFontDescent);
+    const {pixels} = useGlyph(codePoint);
+    useCanvas(ref, useCallback((ctx, width, height) => {
+        const character = String.fromCodePoint(codePoint);
+        {
+            ctx.save();
+            ctx.translate(1 + (width - 1) / 2, 1 + headerHeight / 2);
+            ctx.textBaseline = 'middle';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = color;
+            ctx.shadowOffsetY = 1;
+            ctx.shadowColor = inverseColor;
+            ctx.shadowBlur = 2;
+            ctx.font = `${(headerHeight * 0.9).toFixed(1)}px sans-serif`;
+            ctx.fillText(character, 0, 0);
+            ctx.restore();
+        }
+        if (0 < pixels.size) {
+            ctx.save();
+            const availableHeight = height - headerHeight;
+            const margin = width * 0.15;
+            const scale = (availableHeight - margin * 2) / (ascent + descent);
+            ctx.transform(scale, 0, 0, -scale, margin, height - margin);
+            ctx.translate(0, descent);
+            ctx.beginPath();
+            for (const [x, column] of pixels) {
+                for (const y of column) {
+                    ctx.rect(x, y, 1, 1);
                 }
             }
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.restore();
         }
-    }, [ref, codePoint, printable, headerHeight, color, inverseColor]);
+    }, [codePoint, color, headerHeight, inverseColor, pixels, ascent, descent]));
     const dispatch = useDispatch();
     const onClick = useCallback(() => {
         dispatch(OpenEditor(codePoint));
