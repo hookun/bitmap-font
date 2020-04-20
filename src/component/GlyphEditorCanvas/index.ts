@@ -17,7 +17,7 @@ import {
     selectEditorBoundingBox,
     selectEditorProjected,
 } from '../../core/Editor/selector';
-import {TogglePixel} from '../../core/Glyph/action';
+import {TogglePixel, FillPixel, ClearPixel} from '../../core/Glyph/action';
 import {useColor} from '../../use/Color';
 import {Point} from '../../core/type';
 import {useGlyph} from '../../use/Glyph';
@@ -283,6 +283,18 @@ export const GlyphEditorCanvas = (
         id: `${codePoint.toString(34)}`,
         ref,
         onClick: useCallback((data) => dispatch(TogglePixel(data)), [dispatch]),
+        onDraw: useCallback((data) => {
+            switch (data.button) {
+                case 2:
+                    dispatch(ClearPixel(data));
+                    break;
+                case 1:
+                    dispatch(TogglePixel(data));
+                    break;
+                default:
+                    dispatch(FillPixel(data));
+            }
+        }, [dispatch]),
         onHover: useCallback((data) => dispatch(SetEditorPointer(data)), [dispatch]),
         onLeave: useCallback(() => dispatch(SetEditorPointer(null)), [dispatch]),
         onGrab: useCallback((data) => dispatch(GrabEditor(data)), [dispatch]),

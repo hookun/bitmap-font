@@ -13,6 +13,7 @@ export interface GrabData extends Position {
     clientY: number,
     width: number,
     height: number,
+    button?: number,
 }
 
 export interface DragData extends Omit<GrabData, 'd'> {
@@ -43,6 +44,7 @@ export const getPosition = (...events: Array<MouseEvent | Touch | null>): Positi
 export const getGrabbing = (
     {x: clientX, y: clientY, d}: Position,
     element: Element,
+    button?: number,
 ): GrabData => {
     const rect = element.getBoundingClientRect();
     const {height} = rect;
@@ -54,6 +56,7 @@ export const getGrabbing = (
         x: clientX - rect.left,
         y: height - (clientY - rect.top),
         d,
+        button,
     };
 };
 
@@ -81,6 +84,7 @@ export const useGrab = (
         onDrag = noop,
         onScale = noop,
         onClick = noop,
+        onDraw = noop,
         onRelease = noop,
         scaleSensitivity = 0.0001,
         clickThreshold = 4,
@@ -94,6 +98,7 @@ export const useGrab = (
         onDrag?: (data: DragData) => void,
         onScale?: (data: ScaleData) => void,
         onClick?: (data: GrabData) => void,
+        onDraw?: (data: GrabData) => void,
         onRelease?: () => void,
         scaleSensitivity?: number,
         clickThreshold?: number,
@@ -107,7 +112,7 @@ export const useGrab = (
         let hover = false;
         let clickFlag = false;
         let grabbing: GrabData | null = null;
-        const move = (pos: Position): void => {
+        const move = (pos: Position, shift?: boolean): void => {
             if (grabbing) {
                 const dx = pos.x - grabbing.clientX;
                 const dy = grabbing.clientY - pos.y;
@@ -115,15 +120,18 @@ export const useGrab = (
                     if (clickThreshold < Math.hypot(dx, dy)) {
                         clickFlag = false;
                     }
-                } else {
+                }
+                if (shift) {
+                    onDraw(getGrabbing(pos, element, grabbing.button));
+                } else if (!clickFlag) {
                     onDrag({...grabbing, dx, dy});
                 }
             } else {
                 onHover(getGrabbing(pos, element));
             }
         };
-        const grab = (pos: Position): void => {
-            grabbing = getGrabbing(pos, element);
+        const grab = (pos: Position, button?: number): void => {
+            grabbing = getGrabbing(pos, element, button);
             clickFlag = true;
             setGrab(id);
             onGrab(grabbing);
@@ -147,7 +155,7 @@ export const useGrab = (
         };
         const onMouseDown = (event: MouseEvent): void => {
             event.preventDefault();
-            grab(getPosition(event));
+            grab(getPosition(event), event.button);
         };
         const onMouseMove = (event: MouseEvent): void => {
             if (isGrabbing()) {
@@ -156,7 +164,7 @@ export const useGrab = (
                 }
             }
             event.stopPropagation();
-            move(getPosition(event));
+            move(getPosition(event), event.shiftKey);
         };
         const onTouchStart = (event: TouchEvent): void => {
             const {touches: [touch1, touch2]} = event;
@@ -171,24 +179,24 @@ export const useGrab = (
             }
         };
         const onTouchMove = (event: TouchEvent): void => {
-            if (grabbing) {
-                const {touches: [touch1, touch2]} = event;
-                if (touch2) {
-                    event.preventDefault();
-                    const {x: clientX, y: clientY, d} = getPosition(touch1, touch2);
-                    const rect = element.getBoundingClientRect();
-                    onScale({
-                        width: rect.width,
-                        height: rect.height,
-                        clientX,
-                        clientY,
-                        x: clientX - rect.left,
-                        y: clientY - rect.top,
-                        dx: 0,
-                        dy: 0,
-                        scale: d / grabbing.d,
-                    });
-                }
+            const {touches: [touch1, touch2]} = event;
+            if (grabbing && touch2) {
+                event.preventDefault();
+                const {x: clientX, y: clientY, d} = getPosition(touch1, touch2);
+                const rect = element.getBoundingClientRect();
+                onScale({
+                    width: rect.width,
+                    height: rect.height,
+                    clientX,
+                    clientY,
+                    x: clientX - rect.left,
+                    y: clientY - rect.top,
+                    dx: 0,
+                    dy: 0,
+                    scale: d / grabbing.d,
+                });
+            } else if (!touch2) {
+                move(getPosition(touch1), event.shiftKey);
             }
         };
         const onWheel = (event: WheelEvent): void => {
@@ -217,6 +225,10 @@ export const useGrab = (
                 onLeave();
             }
         };
+        const onContextMenu = (event: MouseEvent): void => {
+            event.preventDefault();
+        };
+        element.addEventListener('contextmenu', onContextMenu);
         element.addEventListener('mouseenter', onMouseEnter);
         element.addEventListener('mouseleave', onMouseLeave);
         element.addEventListener('mousedown', onMouseDown);
@@ -228,6 +240,7 @@ export const useGrab = (
         addEventListener('touchend', onTouchEnd);
         return (): void => {
             onRelease();
+            element.removeEventListener('contextmenu', onContextMenu);
             element.removeEventListener('mouseenter', onMouseEnter);
             element.removeEventListener('mouseleave', onMouseLeave);
             element.removeEventListener('mousedown', onMouseDown);
@@ -249,6 +262,7 @@ export const useGrab = (
         onEnter,
         onLeave,
         onClick,
+        onDraw,
         scaleSensitivity,
         clickThreshold,
     ]);
