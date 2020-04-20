@@ -30,20 +30,19 @@ const notFoundUCDEntry: UCDEntry = {
 export const useUCD = (codePoint: number): UCDEntry => {
     const [data, setData] = useState<UCDEntry>(loadingUCDEntry);
     useEffect(() => {
-        let unmounted = false;
+        let active = true;
         promise.then(({range, map}) => {
-            if (unmounted) {
-                return;
-            }
-            for (const {start, end, data} of range) {
-                if (start <= codePoint && codePoint <= end) {
-                    return setData(data);
+            if (active) {
+                for (const {start, end, data} of range) {
+                    if (start <= codePoint && codePoint <= end) {
+                        return setData(data);
+                    }
                 }
+                setData(map.get(codePoint) || notFoundUCDEntry);
             }
-            setData(map.get(codePoint) || notFoundUCDEntry);
         });
         return (): void => {
-            unmounted = true;
+            active = false;
         };
     }, [codePoint]);
     return data;

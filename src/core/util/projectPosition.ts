@@ -2,15 +2,18 @@ import {Point} from '../type';
 
 export interface ProjectResult {
     size: number,
-    origin: Point,
+    ox: number,
+    oy: number,
+    pointer?: Point,
+    drag?: Point,
 }
 
 export const projectPosition = (
     {size, origin, pointer, drag, scale}: {
         size: number,
         origin: Point,
-        pointer: Point,
-        drag: Point,
+        pointer?: Point,
+        drag?: Point,
         scale: number,
     },
 ): ProjectResult => {
@@ -26,6 +29,9 @@ export const projectPosition = (
     }
     return {
         size: size * scale,
-        origin: [ox, oy],
+        ox,
+        oy,
+        pointer,
+        drag,
     };
 };

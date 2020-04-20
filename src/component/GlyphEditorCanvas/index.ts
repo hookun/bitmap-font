@@ -10,8 +10,13 @@ import className from './style.css';
 import {useGrab} from '../../use/Grab';
 import {useDispatch, useSelector} from 'react-redux';
 import {GrabEditor, DragEditor, ReleaseEditor, SetEditorPointer} from '../../core/Editor/action';
-import {selectEditor} from '../../core/Editor/selector';
-import {projectPosition} from '../../core/util/projectPosition';
+import {
+    selectEditorAxis,
+    selectEditorBaseline,
+    selectEditorGrid,
+    selectEditorBoundingBox,
+    selectEditorProjected,
+} from '../../core/Editor/selector';
 import {TogglePixel} from '../../core/Glyph/action';
 import {useColor} from '../../use/Color';
 import {Point} from '../../core/type';
@@ -213,11 +218,13 @@ export const GlyphEditorCanvas = (
 ): ReactElement => {
     const dispatch = useDispatch();
     const ref = useRef<HTMLCanvasElement>();
-    const editor = useSelector(selectEditor);
     const ascent = useSelector(selectFontAscent);
     const descent = useSelector(selectFontDescent);
-    const {pointer, axis, baseline, drag, grid, boundingBox} = editor;
-    const {origin: [ox, oy], size} = projectPosition(editor);
+    const axis = useSelector(selectEditorAxis);
+    const baseline = useSelector(selectEditorBaseline);
+    const grid = useSelector(selectEditorGrid);
+    const boundingBox = useSelector(selectEditorBoundingBox);
+    const {ox, oy, size, drag, pointer} = useSelector(selectEditorProjected);
     const color = rgbToHex(useColor(ref));
     const glyph = useGlyph(codePoint);
     const bb = useBoundingBox(boundingBox ? glyph : null);

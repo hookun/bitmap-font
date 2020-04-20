@@ -10,13 +10,18 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import {classnames} from '@hookun/util/classnames';
 import {CloseFontSettings, SetEditorConfig} from '../../core/Editor/action';
-import {selectFontConfig, selectEditor} from '../../core/Editor/selector';
-import className from './style.css';
 import {selectFont} from '../../core/Font/selector';
 import {GlyphMetrics} from '../GlyphMetrics';
 import {SetFontConfig} from '../../core/Font/action';
 import {FontStateLimits} from '../../core/Font/util/patchFontState';
 import {EditorStateLimits} from '../../core/Editor/util/patchEditorState';
+import {
+    selectFontConfig,
+    selectEditorWidth,
+    selectEditorHeight,
+    selectEditorAdvance,
+} from '../../core/Editor/selector';
+import className from './style.css';
 
 export interface InputData<Type> {
     value: Type,
@@ -81,13 +86,15 @@ export const FontConfig = (): ReactElement => {
     const dispatch = useDispatch();
     const active = useSelector(selectFontConfig);
     const font = useSelector(selectFont);
-    const editor = useSelector(selectEditor);
+    const editorWidth = useSelector(selectEditorWidth);
+    const editorHeight = useSelector(selectEditorHeight);
+    const editorAdvance = useSelector(selectEditorAdvance);
     const name = useFontNameInput(font.name);
     const ascent = useSizeInput(font.ascent, FontStateLimits.ascent);
     const descent = useSizeInput(font.descent, FontStateLimits.descent);
-    const width = useSizeInput(editor.width, EditorStateLimits.width);
-    const height = useSizeInput(editor.height, EditorStateLimits.height);
-    const advance = useSizeInput(editor.advance, EditorStateLimits.advance);
+    const width = useSizeInput(editorWidth, EditorStateLimits.width);
+    const height = useSizeInput(editorHeight, EditorStateLimits.height);
+    const advance = useSizeInput(editorAdvance, EditorStateLimits.advance);
     const close = useCallback(() => dispatch(CloseFontSettings()), [dispatch]);
     return createElement(
         'div',
@@ -177,7 +184,7 @@ export const FontConfig = (): ReactElement => {
                 max: width.max,
                 step: width.step,
                 className: className.width,
-                defaultValue: editor.width,
+                defaultValue: editorWidth,
                 onChange: width.onChange,
             }),
             createElement('div', {className: className.error}, descent.error),
@@ -189,7 +196,7 @@ export const FontConfig = (): ReactElement => {
                 max: height.max,
                 step: height.step,
                 className: className.height,
-                defaultValue: editor.height,
+                defaultValue: editorHeight,
                 onChange: height.onChange,
             }),
             createElement('div', {className: className.error}, descent.error),
@@ -201,7 +208,7 @@ export const FontConfig = (): ReactElement => {
                 max: advance.max,
                 step: advance.step,
                 className: className.advance,
-                defaultValue: editor.advance,
+                defaultValue: editorAdvance,
                 onChange: advance.onChange,
             }),
             createElement('div', {className: className.error}, descent.error),

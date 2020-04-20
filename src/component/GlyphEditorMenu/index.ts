@@ -1,15 +1,15 @@
 import {createElement, ReactElement, useCallback, MouseEvent} from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {classnames} from '@hookun/util/classnames';
 import {SetEditorMessage, CloseEditor} from '../../core/Editor/action';
-import {useEditorMenuState} from '../../use/EditorStateMenu';
 import className from './style.css';
 import rootClassName from '../../style.css';
 import {DeleteGlyph} from '../../core/Glyph/action';
+import {selectEditorMenu} from '../../core/Editor/selector';
 
 export const GlyphEditorMenu = ({codePoint}: {codePoint: number}): ReactElement => {
     const dispatch = useDispatch();
-    const opened = useEditorMenuState(codePoint);
+    const opened = useSelector(selectEditorMenu) === codePoint;
     const character = String.fromCodePoint(codePoint);
     return createElement(
         'div',

@@ -8,8 +8,21 @@ import {classnames} from '@hookun/util/classnames';
 import {useIntersection} from '../../use/Intersection';
 import {useSelector, useDispatch} from 'react-redux';
 import {selectFont} from '../../core/Font/selector';
-import {OpenFontSettings, ChangeEditorGrid, ChangeEditorBoundingBox, ChangeEditorAxis, ChangeEditorBaseline} from '../../core/Editor/action';
-import {selectEditor} from '../../core/Editor/selector';
+import {
+    OpenFontSettings,
+    ChangeEditorGrid,
+    ChangeEditorBoundingBox,
+    ChangeEditorAxis,
+    ChangeEditorBaseline,
+} from '../../core/Editor/action';
+import {
+    selectEditorWidth,
+    selectEditorHeight,
+    selectEditorAxis,
+    selectEditorBaseline,
+    selectEditorGrid,
+    selectEditorBoundingBox,
+} from '../../core/Editor/selector';
 import className from './style.css';
 
 export const Control = (): ReactElement => {
@@ -17,7 +30,12 @@ export const Control = (): ReactElement => {
     const intersection = useIntersection(ref, {threshold: 1});
     const dispatch = useDispatch();
     const font = useSelector(selectFont);
-    const editor = useSelector(selectEditor);
+    const width = useSelector(selectEditorWidth);
+    const height = useSelector(selectEditorHeight);
+    const axis = useSelector(selectEditorAxis);
+    const baseline = useSelector(selectEditorBaseline);
+    const grid = useSelector(selectEditorGrid);
+    const boundingBox = useSelector(selectEditorBoundingBox);
     const openConfig = useCallback(
         () => dispatch(OpenFontSettings()),
         [dispatch],
@@ -35,8 +53,8 @@ export const Control = (): ReactElement => {
             ['フォント名', font.name],
             ['上端', font.ascent],
             ['下端', font.descent],
-            ['幅', editor.width],
-            ['高さ', editor.height],
+            ['幅', width],
+            ['高さ', height],
         ].map(([label, value]) => createElement(
             'button',
             {
@@ -53,7 +71,7 @@ export const Control = (): ReactElement => {
                 onClick: useCallback(() => dispatch(ChangeEditorAxis()), [dispatch]),
             },
             createElement('div', {className: className.label}, '軸'),
-            `${editor.axis}`,
+            `${axis}`,
         ),
         createElement(
             'button',
@@ -62,7 +80,7 @@ export const Control = (): ReactElement => {
                 onClick: useCallback(() => dispatch(ChangeEditorBaseline()), [dispatch]),
             },
             createElement('div', {className: className.label}, '基準線'),
-            `${editor.baseline}`,
+            `${baseline}`,
         ),
         createElement(
             'button',
@@ -71,7 +89,7 @@ export const Control = (): ReactElement => {
                 onClick: useCallback(() => dispatch(ChangeEditorGrid()), [dispatch]),
             },
             createElement('div', {className: className.label}, '罫線'),
-            `${editor.grid}`,
+            `${grid}`,
         ),
         createElement(
             'button',
@@ -80,7 +98,7 @@ export const Control = (): ReactElement => {
                 onClick: useCallback(() => dispatch(ChangeEditorBoundingBox()), [dispatch]),
             },
             createElement('div', {className: className.label}, '囲み枠'),
-            `${editor.boundingBox}`,
+            `${boundingBox}`,
         ),
     );
 };

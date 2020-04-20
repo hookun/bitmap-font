@@ -8,15 +8,14 @@ import {selectDB} from '../../selector';
 import {selectFontId} from '../../Font/selector';
 import {loadGlyph as loadGlyphFromDB} from '../util/loadGlyph';
 import {SagaSetGlyph} from '../action';
-import {selectEditor} from '../../Editor/selector';
-import {EditorState} from '../../Editor/type';
+import {selectEditngCodePoints} from '../../Editor/selector';
 
 export const loadGlyph = function* () {
     while (1) {
         yield take([SagaSetEditor, OpenEditor, OpenEditors].map(getType));
-        const [map, {editing}]: [GlyphMap, EditorState] = yield all([
+        const [map, editing]: [GlyphMap, Array<number>] = yield all([
             select(selectGlyphMap),
-            select(selectEditor),
+            select(selectEditngCodePoints),
         ]);
         const toBeLoaded = editing.filter((codePoint) => !map.has(codePoint));
         if (0 < toBeLoaded.length) {

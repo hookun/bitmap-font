@@ -1,4 +1,4 @@
-import {createElement, ReactElement, useCallback, DragEvent} from 'react';
+import {createElement, ReactElement, useCallback, DragEvent, useMemo, HTMLProps} from 'react';
 import {useDispatch} from 'react-redux';
 import className from './style.css';
 import {useUCD} from '../../use/UCD';
@@ -39,10 +39,24 @@ export const GlyphControl = ({codePoint}: {codePoint: number}): ReactElement => 
     );
 };
 
-export const GlyphEditor = ({codePoint}: {codePoint: number}): ReactElement => {
-    const dispatch = useDispatch();
-    const characterData = useUCD(codePoint);
+export const GlyphMessage = ({codePoint}: {codePoint: number}): ReactElement => {
     const message = useEditorMessage(codePoint);
+    if (message) {
+        return createElement(
+            'div',
+            {
+                className: className.message,
+                style: {color: message.color || null},
+            },
+            message.text,
+        );
+    }
+    return null;
+};
+
+export const GlyphEditor = ({codePoint}: {codePoint: number}): ReactElement => {
+    const characterData = useUCD(codePoint);
+    const dispatch = useDispatch();
     const onEnter = useCallback(
         () => dispatch(EnterEditor({codePoint, element: 'root'})),
         [dispatch, codePoint],
@@ -63,7 +77,6 @@ export const GlyphEditor = ({codePoint}: {codePoint: number}): ReactElement => {
             }, [codePoint]),
             onDragOver: useCallback((event: DragEvent) => {
                 event.preventDefault();
-                console.log('over');
             }, []),
             onDrop: useCallback(({nativeEvent}: DragEvent) => {
                 const dragged = parseInt(nativeEvent.dataTransfer.getData('text/plain'), 16);
@@ -73,14 +86,7 @@ export const GlyphEditor = ({codePoint}: {codePoint: number}): ReactElement => {
             }, [dispatch, codePoint]),
             draggable: true,
         },
-        message && createElement(
-            'div',
-            {
-                className: className.message,
-                style: {color: message.color || null},
-            },
-            message.text,
-        ),
+        createElement(GlyphMessage, {codePoint}),
         createElement(Character, {codePoint}),
         createElement(
             'div',

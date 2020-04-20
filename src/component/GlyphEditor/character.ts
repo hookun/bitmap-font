@@ -1,11 +1,11 @@
 import {createElement, ReactElement, useCallback, Fragment, MouseEvent} from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {classnames} from '@hookun/util/classnames';
 import {EnterEditor, ToggleEditorMenu, CloseEditor} from '../../core/Editor/action';
 import {useAltKey} from '../../use/AltKey';
-import {useEditorMenuState} from '../../use/EditorStateMenu';
 import className from './style.css';
 import rootClassName from '../../style.css';
+import {selectEditorMenu} from '../../core/Editor/selector';
 
 export const Character = ({codePoint}: {codePoint: number}): ReactElement => {
     const dispatch = useDispatch();
@@ -21,7 +21,7 @@ export const Character = ({codePoint}: {codePoint: number}): ReactElement => {
         () => dispatch(EnterEditor({codePoint, element: 'root'})),
         [dispatch, codePoint],
     );
-    const opened = useEditorMenuState(codePoint);
+    const opened = useSelector(selectEditorMenu) === codePoint;
     const character = String.fromCodePoint(codePoint);
     return createElement(
         'button',

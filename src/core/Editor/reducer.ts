@@ -107,11 +107,18 @@ export const reducer = createReducer<EditorState, EditorStateAction>(patch())
     return patch(state, {pointer: payload && [payload.x, payload.y]});
 })
 .handleAction(DragEditor, (state, {payload: {dx, dy, scale}}) => patch(state, {drag: [dx, dy], scale}))
-.handleAction(ReleaseEditor, (state, {payload}) => patch(
-    state,
-    projectPosition({...state, ...payload}),
-    {drag: null, scale: 1},
-))
+.handleAction(ReleaseEditor, (state, {payload}) => {
+    const {ox, oy, size} = projectPosition({...state, ...payload});
+    return patch(
+        state,
+        {
+            origin: [ox, oy],
+            size,
+            drag: null,
+            scale: 1,
+        },
+    );
+})
 .handleAction(PointerDown, (state) => patch(state, {menu: null}))
 .handleAction(SetEditorLoading, (state, {payload: loading}) => patch(state, {loading}))
 .handleAction(SetEditorSaving, (state, {payload: saving}) => patch(state, {saving}))

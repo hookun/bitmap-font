@@ -1,30 +1,55 @@
-import {useMemo} from 'react';
+import {useEffect, Reducer, useReducer} from 'react';
 import {useAltKey} from './AltKey';
-import {useEditorState} from './EditorState';
 import {EditorMessage} from '../core/Editor/type';
+import {useSelector} from 'react-redux';
+import {
+    selectEditorCodePoint,
+    selectEditorMessage,
+    selectEditorMenu,
+    selectEditorElement,
+} from '../core/Editor/selector';
+
+export const messageReducer: Reducer<EditorMessage | null, EditorMessage | null> = (
+    current,
+    message,
+) => {
+    if (message) {
+        if (current && current.color === message.color && current.text === message.text) {
+            return current;
+        }
+        return message;
+    }
+    return null;
+};
 
 export const useEditorMessage = (codePoint: number): EditorMessage | null => {
-    const editor = useEditorState(codePoint);
+    const editorCodePoint = useSelector(selectEditorCodePoint);
+    const editorMessage = useSelector(selectEditorMessage);
+    const menu = useSelector(selectEditorMenu);
+    const element = useSelector(selectEditorElement);
     const altKey = useAltKey();
-    return useMemo(
-        () => {
-            if (editor) {
-                if (editor.message) {
-                    return editor.message;
-                }
-                const {element, menu} = editor;
-                if (element == 'toggle') {
+    const [message, setMessage] = useReducer(messageReducer, null);
+    useEffect(
+        (): void => {
+            if (codePoint === editorCodePoint) {
+                if (editorMessage) {
+                    setMessage(editorMessage);
+                } else if (element == 'toggle') {
                     if (altKey) {
-                        return {text: '閉じる'};
+                        setMessage({text: '閉じる'});
                     } else if (menu) {
-                        return {text: 'メニューを閉じる'};
+                        setMessage({text: 'メニューを閉じる'});
                     } else {
-                        return {text: 'メニューを開く'};
+                        setMessage({text: 'メニューを開く'});
                     }
+                } else {
+                    setMessage(null);
                 }
+            } else {
+                setMessage(null);
             }
-            return null;
         },
-        [editor, altKey],
+        [codePoint, editorCodePoint, altKey, editorMessage, menu, element],
     );
+    return message;
 };
